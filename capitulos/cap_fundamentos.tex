@@ -1,20 +1,17 @@
 \chapter{Fundamentos Teóricos}\label{cap-fundamentos}
 
 \section{Detectores por Produto Interno com Minimização do Erro Quadrático Médio (IPD)}
-
-Dado um conjunto de padrões de entrada, serão atribuídos diferentes pesos os quais definirão a aceitação/rejeição dos mesmos ao passar pelo classificador proposto. Esses classificadores são colocados em cascata, dessa forma, a saída de um é a entrada do próximo, dessa forma garantimos no final do sistema uma classificação mais robusta \cite{waldir}.
+               
+O projeto do classificador utilizando detector por produto interno pode ser feito da seguinte forma: suponhamos uma variável aleatória, ou seja, uma variável cujo os seus resultados sejam imprevisíveis, $X_{dx1}$. Suas realizações podem ser classificadas nas classes {${A_1},\,{A_2},\,...,\,{A_n}$} ou na classe B, sendo que a classe ${A_i}$ representa os padrões que desejamos encontrar e B representa os demais padrões que não seja de interesse. As probabilidades de encontrarmos essas classes são dadas por:
                  
-Para exemplificarmos o projeto do nosso classificador \textbf{h} suponhamos uma variável aleatória, ou seja, uma variável cujo os seus resultados sejam imprevisíveis, $X_{dx1}$. Suas realizações podem ser classificadas nas classes {
-${A_1},\,{A_2},\,...,\,{A_n}$} ou na classe B, sendo que a classe ${A_i}$ representa os padrões (ou algo próximo dos padrões) que desejamos encontrar e B representa os demais padrões. As probabilidades de contrarmos essas classes são dadas por:
-                 
-\begin{equation}
+\begin{equation}\label{eq_prob}
 \begin{array}{l}
 p({A_i}) = p(X \in {A_i}) = {p_i}\\
 p(B) = p(X \in B)
 \end{array}
 \end{equation}
 
-O classicador \textbf{h} é projetado de tal forma que o produto interno dele com uma entrada \textit{X} seja dado por:
+O classificador \textbf{h} é projetado de tal forma que o produto interno dele com uma entrada \textit{X} seja dado por:
                 
 \begin{equation}\label{eq_probabilidades}
 <x, h_{A_{i}}>=h^{t}_{A_{i}}x=C 
