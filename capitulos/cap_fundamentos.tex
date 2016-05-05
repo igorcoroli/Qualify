@@ -1,8 +1,6 @@
 \chapter{Fundamentos Teóricos}\label{cap-fundamentos}
 
-Detectores de faces humanas e reconhecimentos biométrico entre outras \textit{features} podem ser encontradas em diversos aparelhos eletrônicos como smartphones, tablets e máquinas digitais por exemplo. Esses artifícios poderão ser alcançadas graças ao desenvolvimento de técnicas de reconhecimentos de padrões, as quais muitas utilizam Filtros de Correlação ou CF (em inglês, Correlation Filters, \cite{kumar}). A seguir será apresentada uma técnica denominada Detectores por Produto Interno (IPD) proposta por \cite{fundamentos1}. A idéia central desse método é desenvolver uma classe na forma de um vetor h que minimizará o erro quadrático médio. A saída desse classificador se dará através do produto interno da entrada com o vetor h.
-
-\subsection{Detectores por Produto Interno com Minimização do Erro Quadrático Médio (IPD)}
+\section{Detectores por Produto Interno com Minimização do Erro Quadrático Médio (IPD)}
 
 Dado um conjunto de padrões de entrada, serão atribuídos diferentes pesos os quais definirão a aceitação/rejeição dos mesmos ao passar pelo classificador proposto. Esses classificadores são colocados em cascata, dessa forma, a saída de um é a entrada do próximo, dessa forma garantimos no final do sistema uma classificação mais robusta \cite{waldir}.
                  
@@ -78,7 +76,7 @@ E[X{X^t}] = E[X{X^t}|B]p(B) + \sum\limits_{j = 1}^n E [X{X^t}|{A_j}]p({A_j})\\
 \end{array}
 \end{equation}
 
-Conforme verificamos na Equação \eqref{eq_probabilidades}, obteremos a saída igual a 1 para o caso da variável aleatória X for classificada na classe $A_i$ e 0 caso contrário. Seguindo o raciocínio desenvolvido para a classe A podemos obter as classes representadas através do complemento de $A_i$, dado por $\[A_i^C\]$:
+Conforme verificamos na Equação \eqref{eq_probabilidades}, obteremos a saída igual a 1 para o caso da variável aleatória X for classificada na classe $A_i$ e 0 caso contrário. Seguindo o raciocínio desenvolvido para a classe A podemos obter as classes representadas através do complemento de $A_i$, dado por $A_i^C$:
 
 \begin{equation}
 \begin{array}{l}
@@ -100,7 +98,7 @@ Considerando-se a matriz de autocorrelação de B igual a $R_B$ e a matriz $A_i$ i
 {h_{Ai}} = {\{ p(B){R_B} + \sum\limits_{j = 1}^n {{p_j}{R_{Aj}}} \} ^{ - 1}}\{ {p_i}{\mu _{Ai}}\}
 \end{equation}
 
-A condição de existência do classificador projetado é que o primeiro termo da equação \eqref{vetorH_final} seja uma matriz inversível e a dimensão dos vetores de entrada deve ser menor que a soma dos números de elementos de todas as classes $A_j$ e B, ou seja $\[d \le \,r\, + \,\sum\limits_{j = 1}^n {{L_j}} \]$.
+A condição de existência do classificador projetado é que o primeiro termo da equação \eqref{vetorH_final} seja uma matriz inversível e a dimensão dos vetores de entrada deve ser menor que a soma dos números de elementos de todas as classes $A_j$ e B, ou seja $d \le \,r\, + \,\sum\limits_{j = 1}^n {{L_j}}$.
               
                       
 \section{Programação Paralela - OPENMP}
