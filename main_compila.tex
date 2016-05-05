@@ -1,0 +1,117 @@
+\documentclass[msc]{cls_bst/cls_file_ufam}
+
+%nao mudar msc--- formato para mestrado
+%compilar para GS
+%CTRL+SHIFT+L
+%CTRL+SHIFT+D
+%CTRL+SHIFT+G
+
+%compilar DVI (figuras em eps)
+%%CTRL+SHIFT+X
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% pacotes e sets
+
+\usepackage{epstopdf}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,brazil]{babel}
+\usepackage{indentfirst}
+\usepackage{subfigure}
+\usepackage{epsfig}
+%\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{longtable}
+\usepackage{setspace}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{bbm}
+%\usepackage[portugues,algoruled,longend]{algorithm2e}
+%\usepackage{algorithmic}
+\usepackage{amssymb}
+\usepackage{fancyhdr} %op1: boxed,lined %op2: ruled,vlined
+%\usepackage[portugues,boxed,lined]{algorithm2e}
+\setcounter{secnumdepth}{3}      % numeracao ate subsubsecao
+\setcounter{tocdepth}{2}         % índice ate subsubsecao
+\setcounter{chapter}{0}
+\setlength{\parindent}{1.25cm}   % indentação de 1.25 cm
+
+%\usepackage{upgreek}
+\usepackage[final]{pdfpages}
+%\usepackage[number=none]{glossary}
+\usepackage{url}
+\usepackage{float}
+\usepackage{multirow,colortbl,array}
+\usepackage{hhline}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\makeglossary
+%\makelosymbols
+%\makeloabbreviations
+
+\begin{document}
+
+\newcommand{\sgn}{\mathop{\mathrm{sgn}}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% hyphenation
+%\hyphenation{o-ri-gi-nal}
+%\hyphenation{con-si-de-rar-mos}
+%\hyphenation{re-co-nhe-ci-men-to}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% capa
+
+  \input{capitulos/capa}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%\renewcommand{\glossaryname}{Lista de Siglas}
+ % \printglossary
+\mainmatter
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% estrutura de capítulos (vc pode criar outros inputs dos cap aqui
+  \input{capitulos/cap_introducao}
+  \input{capitulos/cap_fundamentos}
+  %\input{capitulos/cap_1}
+  %\input{capitulos/cap_experimentos}
+  \input{capitulos/cap_conclusao}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Referencias
+  \backmatter
+  \nocite{*}
+  \bibliographystyle{cls_bst/bst_ufam}
+  \bibliography{capitulos/referencias}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% apêndice
+  \appendix
+  \input{capitulos/apendice1}
+ %\input{capitulos/apendice3}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\end{document}

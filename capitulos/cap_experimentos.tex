@@ -1,0 +1,17 @@
+\chapter{Experimentos e Resultados}\label{cap-experimentos}
+
+\section{Base de Dados}
+
+%A base de dados é um elemento essencial para o procedimento de experimentos deste sistema de detecção de pontos fiduciais pois disponibiliza as imagens utilizadas no procedimento de treino e teste. A base de dados auxilia o sistema de detecção de pontos fiduciais nas características para o treino do algoritmo SVM e ao final para a extração de características para no cálculo do desempenho do sistema de detecção de pontos fiduciais. Assim, de acordo com a base de dados, podemos identificar se o sistema de pontos fiduciais desenvolvido é robusto.
+
+Nesta dissertação, iremos utilizar duas bases de dados denominadas por \emph{BioID} e \emph{Feret}. A \emph{BioID} é uma base de dados caracterizada por apresentar variações da pose, condições de iluminação natural e  \emph{backgrounds} distintos. Estas características tornaram a \emph{BioID} uma base de dados amplamente utilizada em pesquisas para a comparação de desempenho entre técnicas de classificação aplicadas à sistemas de detecção de pontos fiduciais. A base de dados \emph{BioID} original é composta por $1521$ imagens em escala de cinza com resolução de $384 \times 286$. A \emph{BioID} possui imagens que foram retiradas de $23$ indivíduos em diferentes formas. Neste conjunto, os indivíduos podem conter óculos, barba e bigode. Além das imagens, a base de dados possui uma anotação de $20$ pontos na face e outra contendo somente os olhos. Na Figura \ref{fig20}, podemos visualizar exemplos das imagens da base de dados \emph{BioID}.
+
+%[width=8cm]
+\begin{figure}[!htb]
+  % Requires \usepackage{graphicx}
+  \centering
+  \includegraphics[scale=0.8]{bioid.eps}
+  \caption[Exemplos de imagens da base dados \emph{BioID}.]{Exemplos de imagens da base dados \emph{BioID} \cite{bioID}.}
+  \label{fig20}
+\end{figure}
+

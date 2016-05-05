@@ -1,0 +1,225 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% instruções
+% colocamos tags "mudar" para vc ajustar para a sua dissertação.....
+% procure por tags "mudar" nesse arquivo
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%% ALTERNAR PARA A SUA DISSERTAÇÃO inicio %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\tittese}{%
+	DETECÇÃO DE PONTOS FIDUCIAIS EM FACES HUMANAS UTILIZANDO MÁQUINA DE VETORES SUPORTE %mudar
+}
+
+\newcommand{\titteseing}{%
+	Fiducial Points Detection in Human Faces using Support Vectors Machine %mudar
+}
+
+\newcommand{\authorof}{%
+	Luiz Eduardo Sales e Silva \\ %mudar
+	\vspace{0.8ex}}
+
+\newcommand{\dateof}{%
+	Agosto de 2015 %mudar
+	\vspace{0.8ex}}
+
+\newcommand{\advisorof}{%
+	Prof. D.Sc. Waldir Sabino da Silva Júnior %mudar
+	\vspace{0.8ex}}
+
+\newcommand{\coadvisorof}{%
+	Prof. D.Sc. Fulano %mudar % <---- deixar em branco se não tiver coorientador !!!!!
+	\vspace{0.8ex}}
+\coadvisor{}{\coadvisorof}{}{}
+
+\newcommand{\examinerofa}{%
+	Prof. D.Sc. José %mudar
+	\vspace{0.8ex}}
+
+\newcommand{\examinerofb}{%
+	Prof. D.Sc. Maria %mudar
+	\vspace{0.8ex}}
+%%%%% ALTERNAR PARA A SUA DISSERTAÇÃO fim %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\title{\tittese}
+\foreigntitle{\titteseing}
+\author{\authorof}{}
+\advisor{}{\advisorof}{}{}
+\examiner{}{\examinerofa}{}
+\examiner{}{\examinerofb}{}
+\department{MEE} %nao mudar---- formato para mestrado
+
+
+
+\newcommand{\descrtese}{%
+\hspace{\stretch{1}}\parbox{0.51\textwidth}{%
+Dissertação apresentada ao Programa de P\'os-Gradua\c{c}\~ao em Engenharia Elétrica da Universidade Federal do Amazonas, como requisito parcial para obten\c{c}\~ao do t\'{\i}tulo de Mestre em Engenharia Elétrica na \'area de concentra\c{c}\~ao Controle e Automação de Sistemas.
+}}
+
+%\frontmatter
+%\doublespacing
+%\singlespacing
+\pagestyle{empty}
+
+%{centering
+\begin{center}
+\includegraphics[bb=0 0 646 638,height=2.5cm]{ufam.png}
+
+\textsf{\large UNIVERSIDADE FEDERAL DO AMAZONAS}
+
+\textsf{\large FACULDADE DE TECNOLOGIA}
+
+\textsf{\large PROGRAMA DE P\'OS-GRADUA\c{C}\~AO EM ENGENHARIA ELÉTRICA}
+
+
+\vspace*{4cm}
+\vspace*{\stretch{1}}
+
+\textsf{\bfseries\Large \tittese}
+
+\vspace*{4cm}
+\vspace*{\stretch{1}}
+
+\textsf{\Large \authorof}
+
+\vspace*{3cm}
+\vspace*{\stretch{1}}
+
+Manaus -- Amazonas
+
+\dateof
+
+\end{center}
+
+%}
+%\cleardoublepage
+
+
+% -- Contracapa ---------------------------------------------------------------
+%{\singlespacing\centering
+
+
+\begin{center}
+\textsf{\Large \authorof}
+
+\vspace*{4cm}
+\vspace*{\stretch{2}}
+\textsf{\bfseries\Large \tittese}
+\vspace*{2cm}
+\vspace*{\stretch{1}}
+
+\descrtese
+
+\vspace*{2cm}
+\vspace*{\stretch{1}}
+
+
+\advisorof (orientador) \\
+\coadvisorof (coorientador) \\ %mudar <----- comentar essa linha se não tiver coorientador
+
+
+
+\end{center}
+
+%}
+%\cleardoublepage
+
+
+%%%%% mudar - inicio %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{ficha.pdf} %mudar <---- Ficha catalográfica - pegar na secr. do PPGEE
+
+%%%%% mudar - fim %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+% -- Banca Examinadora --------------------------------------------------------
+\begin{center}
+\textsf{\Large \authorof}
+
+\vspace*{3cm}
+%\vspace*{\stretch{2}}
+
+\textsf{\bfseries\Large \tittese}
+
+\vspace*{1cm}
+%\vspace*{\stretch{1}}
+
+%\descrtese
+
+\vspace*{1cm}
+%\vspace*{\stretch{1}}
+
+Banca Examinadora
+\vspace{2.5em}
+
+\advisorof Presidente\\
+Universidade Federal do Amazonas (UFAM) %mudar (local de trabalho presidente)
+\vspace{2em}
+
+\examinerofa \\
+Universidade Federal do Rio de Janeiro (UFRJ) %mudar (local de trabalho examinador A)
+\vspace{2em}
+
+\examinerofb \\
+Universidade Federal do Amazonas (UFAM) %mudar (local de trabalho examinador A)
+\vspace{2em}
+
+%\vspace*{1cm}
+\vspace*{\stretch{0.5}}
+
+Manaus -- Amazonas
+
+\dateof
+
+\end{center}
+
+%inserir linha em cima da pagina ---------
+\thispagestyle{empty}
+%-----------------------------------------
+
+%  \dedication{Dedicatória.\\
+%  ---.}
+
+  \chapter*{Agradecimentos}
+\begin{itemize}
+  \item Primeiramente à minha mãe, Vanda Sales pelo apoio, esforço, dedicação e compreensão em todos os momentos e por ser a minha inspiração.
+
+
+\end{itemize}
+
+
+\begin{abstract}
+Atualmente, o problema da detecção de pontos fiduciais em faces humanas
+
+\vspace*{\stretch{1}}
+\noindent \textsf{Palavras-chave:} reconhecimento de padrões, detecção de pontos fiduciais, máquina de vetores suporte, grid de parâmetros e C-SVC. %mudar
+
+\end{abstract}
+
+
+
+
+\begin{foreignabstract}
+Currently, the problem of facial fiducial points detection has received
+
+\vspace*{\stretch{1}}
+\noindent \textsf{Keywords:} pattern recognition, fiducial points detection, support vectors machine, parameters grid and C-SVC. %mudar
+
+\end{foreignabstract}
+
+
+
+%inserir linha em cima da pagina --------------------------------------------------------
+   \pagestyle{plain}
+   \lhead[\fancyplain{}{\bfseries\tiny\thepage}]{\fancyplain{}{\bfseries\tiny\rightmark}}
+   \rhead[\fancyplain{}{\bfseries\tiny\leftmark}]{}
+%----------------------------------------------------------------------------------------
+
+  \tableofcontents
+  \listoffigures
+  \listoftables
+
+%}
+\cleardoublepage

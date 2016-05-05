@@ -1,0 +1,77 @@
+  \title{Detecção de Pontos Fiduciais em Faces Humanas utilizando Máquina de Vetores Suporte}
+  \foreigntitle{Fiducial Points Detection in Human Faces using Support Vectors Machine}
+  \author{Luiz Eduardo}{Sales e Silva}
+  \advisor{Prof.}{Waldir Sabino}{da Silva Júnior}{D.Sc.}
+ % \coadvisor{Prof.}{---}{--}{D.Sc.}
+%  \examiner{Prof.}{Waldir Sabino da Silva Júnior}{D.Sc.}
+  \examiner{Prof.}{Frederico da Silva Pinagé}{D.Sc.}
+  \examiner{Prof.}{João Edgar Chaves Filho}{D.Sc.}
+   \department{MEE} %nao mudar---- formato para mestrado
+  %\department{EE}
+  \date{05}{2014}
+
+\keyword{Reconhecimento de Padrões}
+\keyword{Detecção de Pontos Fiduciais}
+  \keyword{Máquina de Vetor Suporte}
+  \keyword{\emph{Grid} de Parâmetros}
+  \keyword{C-SVC}
+%  \maketitle
+
+ \frontmatter
+
+
+%inserir linha em cima da pagina ---------
+\thispagestyle{empty}
+%-----------------------------------------
+
+%  \dedication{Dedicatória.\\
+%  ---.}
+
+  \chapter*{Agradecimentos}
+\begin{itemize}
+  \item Primeiramente à minha mãe, Vanda Sales pelo apoio, esforço, dedicação e compreensão em todos os momentos e por ser a minha inspiração.
+
+  \item À minha irmã Samara pelos momentos de distração.
+
+  \item Aos meus tios, Bento, José e Messias por acreditarem no meu potencial.
+
+%  \item À Layse de Castro, minha namorada, pela paciência, carinho, amor e pelo apoio durante os momentos decisivos.
+
+  \item A Fundação de Amparo à Pesquisa do Estado do Amazonas (FAPEAM) pelo apoio financeiro.
+
+  \item Ao meu orientador Waldir Sabino, pela amizade, compreensão, paciência, orientações e por sempre me ajudar nos momentos difíceis da execução desta dissertação, além de ser um profissional exemplar.
+
+  \item Aos colegas de Laboratório de Visão Computacional pelos trabalhos conjuntos.
+
+  \item Aos colegas de trabalho da Fundação Nokia pelo apoio.
+
+    \item À Professora Ana Rita e aos Professores Edirley e Marden, por possibilitarem a conciliação entre os horários de trabalho e estudo, além de compreenderem a importância desta formação para o desenvolvimento profissional.
+
+    \item Aos amigos Sandiego, Paulo César, Afonso e Fábio Lima pela amizade de longa data, pela compreensão, apoio e respeito.
+
+\end{itemize}
+
+
+\begin{abstract}
+
+Atualmente, o problema da detecção de pontos fiduciais em faces humanas vem recebendo crescente atenção da comunidade científica. Recentemente, podemos encontrar na literatura alguns sistemas desenvolvidos com o objetivo de realizar a detecção de pontos fiduciais. Alguns destes representantes utilizam classificadores SVM. Um dos problemas enfrentados por essa abordagem reside no fato de que o desempenho dos classificadores SVM é extremamente sensível à mudança de seus parâmetros. Esta é uma dificuldade que não é trivial de se explorar. Nesta dissertação, propomos um sistema de detecção de pontos fiduciais, que utiliza classificadores SVM, com o objetivo de investigar o desempenho dos classificadores para um conjunto de parâmetros pré-definidos. Com esta investigação, pretendemos descrever o comportamento do sistema para o conjunto de parâmetros e determinar qual é a combinação de parâmetros, e de seus valores, que produz o melhor desempenho possível para o sistema como um todo. O sistema proposto é complexo devido a grande quantidade de etapas envolvidas.
+A avaliação de desempenho do sistema proposto foi realizada para onze pontos fiduciais da face humana para duas bases de dados de imagens (\emph{BioID} e \emph{Feret}). Os resultados demonstram que o desempenho do sistema proposto é incrementado quando utilizamos a abordagem adotada. O desempenho do sistema é satisfatório quando comparado com os de sistemas similares.
+\end{abstract}
+
+\begin{foreignabstract}
+
+Currently, the problem of facial fiducial points detection has received growing attention from the scientific community. Recently, we can find in the literature some systems developed aiming to perform the fiducial points detection. Some of these systems use SVM classifiers. One of the problems faced by this approach lies in the fact that the performance of SVM classifiers is extremely sensitive to changes in its parameters. This approach has a problem. The performance of SVM classifiers is extremely sensitive to changes in its parameters. This is a difficulty that is not trivial of exploring. In this dissertation, we propose a system for fiducial points detection, which uses SVM classifiers, with the aim of investigating the performance of the classifiers for a set of pre-defined parameters. With this research, we aim to describe the behavior of the system for the parameter set and determine which is the combination of parameters and their values, which produces the best possible performance for the system. The proposed system is complex due to the large number of stages involved. The performance evaluation of the proposed system was done for eleven fiducial points of the human face for two images database (\emph{BioID} and \emph{Feret}). The results show that the performance of the proposed system is increased when using the approach adopted. System performance is satisfactory when compared with similar systems.
+
+\end{foreignabstract}
+
+
+
+%inserir linha em cima da pagina --------------------------------------------------------
+   \pagestyle{plain}
+   \lhead[\fancyplain{}{\bfseries\tiny\thepage}]{\fancyplain{}{\bfseries\tiny\rightmark}}
+   \rhead[\fancyplain{}{\bfseries\tiny\leftmark}]{}
+%----------------------------------------------------------------------------------------
+
+  \tableofcontents
+  \listoffigures
+  \listoftables
