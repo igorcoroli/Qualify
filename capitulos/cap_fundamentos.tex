@@ -98,5 +98,9 @@ Considerando-se a matriz de autocorrelação de $B$ igual a $R_B$ e a matriz $A_i$
 A condição de existência do classificador projetado é que o primeiro termo da equação \eqref{vetorH_final} seja uma matriz inversível e a dimensão dos vetores de entrada deve ser menor que a soma dos números de elementos de todas as classes $A_j$ e B, ou seja $d \le \,r\, + \,\sum\limits_{j = 1}^n {{L_j}}$.
               
 \section{Detector por Produto Interno utilizando Análise de Compomentes Principais (IPD-B-PCA)}
+
+Antes de apresentarmos a utilização de Detectores por Produto Interno aplicado a Análise de Componentes Principais precisamos fazer algumas definições. Entende-se por "Análise de Componentes Principais", também conhecida como  Transformada de \textit{Karhunen-Loève} \cite{schurmann1996pattern}, o procedimento matemático que faz uso de transformadas para a redução de dimensionalidade de um conjunto de variáveis. A ideia central dessa técnica é obter um pequeno número de componentes principais (combinações lineares) de um conjunto inicial de variáveis, onde podemos encontrar o maior volume de informações possíveis. Dessa maneira, utilizaremos essa técnica no projeto dos classificadores com o intuito de aumentar sua robustez.
+
+
                       
 \section{Programação Paralela - OPENMP}
