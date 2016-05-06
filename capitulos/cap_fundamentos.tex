@@ -6,45 +6,45 @@ O projeto do classificador utilizando detector por produto interno pode ser feit
                  
 \begin{equation}\label{eq_prob}
 \begin{array}{l}
-p({A_i}) = p(X \in {A_i}) = {p_i}\\
-p(B) = p(X \in B)
+p({A_i}) = p(\mathcal{X} \in {A_i}) = {p_i}\\
+p(B) = p(\mathcal{X} \in B)
 \end{array}
 \end{equation}
 
-O classificador \textbf{h} é projetado de tal forma que o produto interno dele com uma entrada \textit{X} seja dado por:
+O classificador \textbf{h} é projetado de tal forma que o produto interno dele com uma entrada $\mathcal{X}$ seja dado por:
                 
 \begin{equation}\label{eq_probabilidades}
-<x, h_{A_{i}}>=h^{t}_{A_{i}}x=C 
+<\mathcal{X}, h_{A_{i}}>=h^{t}_{A_{i}}\mathcal{X}=C 
 \end{equation}
                 
-Onde C=1 caso X E $A_i$  e C=0 para X E $A_i$.
+Onde $\mathcal{C}$=1 caso $\mathcal{X} \in A_i$  e $\mathcal{C}=0$ para $\mathcal{X} \in A_{i}$.
                 
-Se tomarmos o problema dos mínimos quadrados que tenta minimizar a soma dos quadrados das diferenças entre o valor estimado e os dados observados, a equação anterior procura encontrar o melhor classificador possível. Sendo assim, podemos definir o erro como:
+Se tomarmos o problema dos mínimos quadrados que tenta minimizar a soma dos quadrados das diferenças entre o valor estimado e os dados observados, a equação \eqref{eq_probabilidades} procura encontrar o melhor classificador possível. Sendo assim, podemos definir o erro como:
 
-\begin{equation}                
-E=h^{t}_{Ai}X-C
+\begin{equation}
+\varepsilon=h^{t}_{Ai}\mathcal{X}-\mathcal{C}
 \end{equation}
-                
-Assim, considerando-se definição de erro quadrático teremos:
+        
+Assim, considerando-se definição de erro quadrático temos:
                 
 \begin{equation}
-||\varepsilon||^{2}=(h^{t}_{Ai}X-C)(h^{t}_{Ai} X-C)^{t}
+||\varepsilon||^{2}=(h^{t}_{Ai}\mathcal{X}-\mathcal{C})(h^{t}_{Ai} \mathcal{X}-\mathcal{C})^{t}\label{eq_erroQuad}
 \end{equation}
                 
-Tomando \textit{$h_{A_{i}}$}, \textit{X} e \textit{C}\ como valores reais e desenvolvendo  a equação anterior chegaremos ao valor esperado do erro quadrático como sendo:
+Assumindo que \textit{$h_{A_{i}}$}, $\mathcal{X}$ e $\mathcal{C}$ como valores reais e desenvolvendo  a equação \eqref{eq_erroQuad} chegaremos ao valor esperado do erro quadrático como sendo:
                 
 
-\begin{equation} \label{erroQuadratico}
-E[||\varepsilon |{|^2}] = h_{Ai}^tE[X{X^t}]{h_{Ai}} - 2h_{Ai}^tE[XC] + E[{C^2}]
+\begin{equation} \label{eq_erroQuadratico}
+E[||\varepsilon|{|^2}] = h_{Ai}^tE[\mathcal{X}{\mathcal{X}^t}]{h_{Ai}} - 2h_{Ai}^tE[\mathcal{XC}] + E[{\mathcal{C}^2}]
 \end{equation}
                 
-Afim de minimizarmos o erro quadrático da equação igualamos a zero (0) o gradiente da equação \eqref{erroQuadratico} em relação a \textit{$h_{A_{i}}$}. Dessa forma, obteremos a seguinte equação:
+Afim de minimizarmos o erro quadrático da equação \eqref{eq_erroQuadratico} igualamos a zero (0) o seu gradiente em relação a \textit{$h_{A_{i}}$}. Dessa forma, obtemos a seguinte expressão:
                 
 \[
 \begin{array}{l}
-\partial E[||\varepsilon |{|^2}] = \frac{\partial }{{\partial {h_{Ai}}}}\{ h_{Ai}^tE[X{X^t}]{h_{Ai}} - 2h_{Ai}^tE[XC] + E[{C^2}]\} \\
-0 = \{ E[X{X^t}] + E{[X{X^t}]^t}\} {h_{Ai}} - 2E[XC]\\
-2E[X{X^t}]{h_{Ai}} - 2E[XC] = 0
+\frac{\partial E[||\varepsilon |{|^2}]}{{\partial {h_{Ai}}}} = \frac{\partial }{{\partial {h_{Ai}}}}\{ h_{Ai}^tE[\mathcal{X}{\mathcal{X}^t}]{h_{Ai}} - 2h_{Ai}^tE[\mathcal{XC}] + E[{\mathcal{C}^2}]\} \\
+0 = \{ E[\mathcal{X}{\mathcal{X}^t}] + E{[\mathcal{X}{\mathcal{X}^t}]^t}\} {h_{Ai}} - 2E[\mathcal{XC}]\\
+2E[\mathcal{X}{\mathcal{X}^t}]{h_{Ai}} - 2E[\mathcal{XC}] = 0
 \end{array}
 \]
                 
@@ -52,44 +52,44 @@ Logo,
 
 \begin{equation}\label{vetorH}
 \begin{array}{l}
-E[X{X^t}]{h_{Ai}} = E[XC]\\
-{h_{Ai}} = {\{ E[X{X^t}]\} ^{ - 1}}E[XC]
+E[\mathcal{X}{\mathcal{X}^t}]{h_{Ai}} = E[\mathcal{XC}]\\
+{h_{Ai}} = {\{ E[\mathcal{X}{\mathcal{X}^t}]\} ^{ - 1}}E[\mathcal{XC}]
 \end{array}
 \end{equation}
                 
-As parcelas $E[X{X^t}]$ e $E[XC]$ até então são desconhecidas. Podemos desenvolver o termo $E[X{X^t}]$ da seguinte forma:
+Os termos $E[\mathcal{X}{\mathcal{X}^t}]$ e $E[\mathcal{XC}]$ até então são desconhecidos. Podemos desenvolver o termo $E[\mathcal{X}{\mathcal{X}^t}]$ da seguinte forma:
 
 \begin{equation}\label{eqSeiSete}
-E[X{X^t}] = E[X{X^t}|B]p(B) + \sum\limits_{j = 1}^n E [X{X^t}|{A_j}]p({A_j})
+E[\mathcal{X}{\mathcal{X}^t}] = E[\mathcal{X}{\mathcal{X}^t}|B]p(B) + \sum\limits_{j = 1}^n E [\mathcal{X}{\mathcal{X}^t}|{A_j}]p({A_j})
 \end{equation}
 
-Lembrando o iníco da seção onde definimos as classes ${A_1},\,{A_2},\,...,\,{A_n}$ e a classe B onde podemos encontrar ${B_1},\,{B_2},\,...,\,{B_n}$, podemos encontrar as médias da Equação \eqref{eqSeiSete} da seguinte forma:
+Lembrando o iníco da seção onde definimos as classes ${A_1},\,{A_2},\,...,\,{A_n}$ e a classe B onde podemos encontrar ${B_1},\,{B_2},\,...,\,{B_n}$, podemos encontrar as médias da equação \eqref{eqSeiSete} da seguinte forma:
 
 \begin{equation}
 \begin{array}{l}
-E[X{X^t}] = E[X{X^t}|B]p(B) + \sum\limits_{j = 1}^n E [X{X^t}|{A_j}]p({A_j})\\
+E[\mathcal{X}{\mathcal{X}^t}] = E[\mathcal{X}{\mathcal{X}^t}|B]p(B) + \sum\limits_{j = 1}^n E [\mathcal{X}{\mathcal{X}^t}|{A_j}]p({A_j})\\
  = p(B)\frac{1}{r}\sum\limits_{j = 1}^r {{B_j}B_j^t + } \sum\limits_{j = 1}^n {p({A_j})\frac{1}{{{L_j}}}} \sum\limits_{k = 1}^{{L_j}} {{A_{jk}}A_{jk}^t} \\
  = p(B)\frac{1}{r}\sum\limits_{j = 1}^r {{B_j}B_j^t + } \sum\limits_{j = 1}^n {{p_j}\frac{1}{{{L_j}}}} \sum\limits_{k = 1}^{{L_j}} {{A_{jk}}A_{jk}^t} 
 \end{array}
 \end{equation}
 
-Conforme verificamos na Equação \eqref{eq_probabilidades}, obteremos a saída igual a 1 para o caso da variável aleatória X for classificada na classe $A_i$ e 0 caso contrário. Seguindo o raciocínio desenvolvido para a classe A podemos obter as classes representadas através do complemento de $A_i$, dado por $A_i^C$:
+Conforme verificamos na equação \eqref{eq_probabilidades}, obteremos a saída igual a 1 para o caso da variável aleatória X for classificada na classe $A_i$ e 0 caso contrário. Seguindo o raciocínio desenvolvido para a classe A temos as classes representadas através do complemento de $A_i$, dado por $A_i^C$:
 
 \begin{equation}
 \begin{array}{l}
-E[XC] = E[XC|{A_i}]p({A_i}) + E[XC|A_i^C](1 - p({A_i}))\\
- = E[X|{A_i}]p({A_i}) + 0(1 - p({A_i}))\\
+E[\mathcal{XC}] = E[\mathcal{XC}|{A_i}]p({A_i}) + E[\mathcal{XC}|A_i^C](1 - p({A_i}))\\
+ = E[\mathcal{X}|{A_i}]p({A_i}) + 0(1 - p({A_i}))\\
  = {p_i}\frac{1}{{{L_1}}}\sum\limits_{k = 1}^{{L_1}} {{A_{ik}}} 
 \end{array}
 \end{equation} 
 
-Logo, a equação \eqref{vetorH}, pode ser reescrita da forma:
+Assim, a equação \eqref{vetorH}, pode ser reescrita da forma:
 
 \begin{equation}
 {h_{Ai}} = {\{ p(B)\frac{1}{r}\sum\limits_{j = 1}^r {{B_j}B_j^t}  + \sum\limits_{j = 1}^n {{p_j}\frac{1}{{{L_j}}}\sum\limits_{k = 1}^{{L_j}} {{A_{jk}}A_{jk}^t} } \} ^{ - 1}}\{ {p_i}\frac{1}{{{L_i}}}\sum\limits_{k = 1}^{{L_i}} {{A_{ik}}} \}
 \end{equation}
 
-Considerando-se a matriz de autocorrelação de B igual a $R_B$ e a matriz $A_i$ igaul a $R_{Ai}$, e a média $A_i$ igual a $\mu_{Ai}$, podemos expressar os resultados em função das variáveis aleatórias, assim, temos:
+Considerando-se a matriz de autocorrelação de $B$ igual a $R_B$ e a matriz $A_i$ igual a $R_{Ai}$, e a média $A_i$ igual a $\mu_{Ai}$, podemos expressar os resultados em função das variáveis aleatórias, assim, temos:
 
 \begin{equation}\label{vetorH_final}
 {h_{Ai}} = {\{ p(B){R_B} + \sum\limits_{j = 1}^n {{p_j}{R_{Aj}}} \} ^{ - 1}}\{ {p_i}{\mu _{Ai}}\}
@@ -97,6 +97,6 @@ Considerando-se a matriz de autocorrelação de B igual a $R_B$ e a matriz $A_i$ i
 
 A condição de existência do classificador projetado é que o primeiro termo da equação \eqref{vetorH_final} seja uma matriz inversível e a dimensão dos vetores de entrada deve ser menor que a soma dos números de elementos de todas as classes $A_j$ e B, ou seja $d \le \,r\, + \,\sum\limits_{j = 1}^n {{L_j}}$.
               
+\section{Detector por Produto Interno utilizando Análise de Compomentes Principais (IPD-B-PCA)}
                       
 \section{Programação Paralela - OPENMP}
-
