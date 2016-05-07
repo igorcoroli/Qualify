@@ -92,15 +92,73 @@ Assim, a equação \eqref{vetorH}, pode ser reescrita da forma:
 Considerando-se a matriz de autocorrelação de $B$ igual a $R_B$ e a matriz $A_i$ igual a $R_{Ai}$, e a média $A_i$ igual a $\mu_{Ai}$, podemos expressar os resultados em função das variáveis aleatórias, assim, temos:
 
 \begin{equation}\label{vetorH_final}
-{h_{Ai}} = {\{ p(B){R_B} + \sum\limits_{j = 1}^n {{p_j}{R_{Aj}}} \} ^{ - 1}}\{ {p_i}{\mu _{Ai}}\}
+{h_{Ai}} = {\{ p(B){R_B} + \sum\limits_{j = 1}^n {{p_j}{R_{Aj}}} \} ^{ - 1}}\{\sum\limits_{i = 1}^m {{p_i}{\mu _{Ai}}}\}
 \end{equation}
 
 A condição de existência do classificador projetado é que o primeiro termo da equação \eqref{vetorH_final} seja uma matriz inversível e a dimensão dos vetores de entrada deve ser menor que a soma dos números de elementos de todas as classes $A_j$ e B, ou seja $d \le \,r\, + \,\sum\limits_{j = 1}^n {{L_j}}$.
               
 \section{Detector por Produto Interno utilizando Análise de Compomentes Principais (IPD-B-PCA)}
 
-Antes de apresentarmos a utilização de Detectores por Produto Interno aplicado a Análise de Componentes Principais precisamos fazer algumas definições. Entende-se por "Análise de Componentes Principais", também conhecida como  Transformada de \textit{Karhunen-Loève} \cite{schurmann1996pattern}, o procedimento matemático que faz uso de transformadas para a redução de dimensionalidade de um conjunto de variáveis. A ideia central dessa técnica é obter um pequeno número de componentes principais (combinações lineares) de um conjunto inicial de variáveis, onde podemos encontrar o maior volume de informações possíveis. Dessa maneira, utilizaremos essa técnica no projeto dos classificadores com o intuito de aumentar sua robustez.
+Antes de apresentarmos a utilização de Detectores por Produto Interno aplicado a Análise de Componentes Principais precisamos fazer algumas definições. Entende-se por "Análise de Componentes Principais", também conhecida como  Transformada de \textit{Karhunen-Loève} \cite{schurmann1996pattern}, o procedimento matemático que faz uso de transformação ortogonal para a redução de dimensionalidade de um conjunto de variáveis. A ideia central dessa técnica é obter um menor número de componentes principais (combinações lineares) de um conjunto inicial de variáveis, onde podemos encontrar o maior volume de informações possíveis. Dessa maneira, utilizaremos essa técnica no projeto dos classificadores com o intuito de aumentar sua robustez.
 
+Matematicamente o PCA pode ser exemplificado da seguinte forma: Seja $\mathcal{X}_{Nx1}$ uma variável aleatória com \textit{N} realizações iguais aos vetores $x_i$. Pretende-se encontrar a base do subespaço que possui a maior variância, definida como $\Phi  = \{ {\phi _1},...,\,{\phi _N}\}$ e obtida através da solução do problema de autovalores, mais especificamente:
 
+\begin{equation}\label{eq_autovalores}
+\Lambda  = {\Phi ^{*t}}\sum\mathcal{X} \Phi
+\end{equation}
+
+onde o sobrescrito $^{*t}$ indica o transposto conjugado da matriz e $\sum \mathcal{X}$ é a matriz de covariância de $\mathcal{X}$ com média igual a zero.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.7]{figuras/esquema_Matriz.png}
+\caption{\textit{N} Detectores por produto interno considerando-se \textit{N} componentes principais.}
+\label{fig_esquemaMatriz}
+\end{figure}
+
+Nesse ponto podemos definir o conceito de \textit{Eigenfaces} como sendo um conjunto de autovetores utilizados no problema de reconhecimento de faces. Esses autovetores são derivadas da matriz de covariância da distribuição de probabilidades referentes as imagens analisadas. A matriz de covariância de $\mathcal{X}$ é dada por:
+
+\begin{equation}\label{eq_MatrizDeCovariancia}
+\sum {_X = \frac{1}{{M - 1}}X{X^{*t}}}
+\end{equation}
+
+Onde \textit{X} é uma matriz formada por M vetores, com M>N (sendo M o número de realizações da variável aleatória $\mathcal{X}_Nx1$) da seguinte forma:
+
+\begin{equation}\label{eq_MatrizX}
+X = [{x_1} - {\mu _x},...,{x_M} - {\mu _x}]
+\end{equation}
+
+Cada vetor $\mu_{i}$ será obtido concatenando as colunas do bloco \textit{i} cujo o centro é ponto fiducial de interesse. A equação $\mu_x$ é dada por:
+
+\begin{equation}\label{eq_mi}
+{\mu _x} = \frac{1}{M}\sum\limits_{i = 1}^M {{x_i}}
+\end{equation}
+
+a diagonal principal da matriz da equação \eqref{eq_autovalores}, correspondem aos autovetores ${\lambda _1},...,\,{\lambda _N}$, conforme pode ser observado na Figura \ref{fig_esquemaMatriz}
+
+Tendo em vista as equações apresentadas bem como o esquema observado na Figura \ref{fig_esquemaMatriz}, faz-se necessário a separação da componente $\phi$ e a rejeição das demais, tendo em vista que se trata de pontos fora da região de interesse. Com o intuito de melhor classificar essas componentes separou-se em três classes distintas, são elas: $\mathcal{A}_1$, $\mathcal{A}_2$ e $\mathcal{B}$, onde:
+
+\begin{description}
+  \item[$\bullet$ $\mathcal{A}_1$] Refere-se a classe dos componentes que desejamos detectar ($\mathcal{A}_1=\phi$)
+  \item[$\bullet$ $\mathcal{A}_2$] Será formada por deslocamentos lineares de $\phi_i$
+  \item[$\bullet$ $\mathcal{B}$] Essa classe comporta todas as outras componentes ($\phi_j$)
+\end{description}
+
+Utilizando-se a Equação \eqref{vetorH_final} para se determinar o detector por produto interno aplicada às componentes principais temos:
+
+\begin{equation}\label{eq_ipd_b_pca}
+h{\phi _i} = {\{ {p_1}{R_{A1}} + {p_2}{R_{A2}} + p(B){R_B}\} ^{ - 1}}\,{p_1}{\mu _{A1}}
+\end{equation}
+
+Se reescrevermos a Equação \eqref{eq_ipd_b_pca} em função dos elementos típicos das classes $\mathcal{A}_1$, $\mathcal{A}_2$ e $\mathcal{B}$ temos:
+
+\begin{equation} \label{eq_IPD-B-PCA_Final}
+h{\phi _i} = {\left\{ {{p_1}{\phi _i}{{({\phi _i})}^{*t}} + {p_2}\frac{1}{{{{(2L + 1)}^2} - 1}}\,\sum\limits_{n =  - L\hfill\atop
+n \ne 0\hfill}^L {\sum\limits_{m =  - L\hfill\atop
+m \ne 0\hfill}^L {{\phi _i}^{(n,m)}{\phi _i}^{{{(n,m)}^{*t}}}} } + p(B)\,\frac{1}{{N - 1}}\,\sum\limits_{j = 1\hfill\atop
+j \ne i\hfill}^N {{\phi _j}{{({\phi _j})}^{*t}}} } \right\}^{ - 1}}\,{p_1}{\phi _i}
+\end{equation}
+
+Por fim, temos que a Equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto interno utilizando análise de componentes principais proposto.
                       
 \section{Programação Paralela - OPENMP}
