@@ -153,10 +153,13 @@ h{\phi _i} = {\{ {p_1}{R_{A1}} + {p_2}{R_{A2}} + p(B){R_B}\} ^{ - 1}}\,{p_1}{\mu
 Se reescrevermos a Equação \eqref{eq_ipd_b_pca} em função dos elementos típicos das classes $\mathcal{A}_1$, $\mathcal{A}_2$ e $\mathcal{B}$ temos:
 
 \begin{equation} \label{eq_IPD-B-PCA_Final}
-h{\phi _i} = {\left\{ {{p_1}{\phi _i}{{({\phi _i})}^{*t}} + {p_2}\frac{1}{{{{(2L + 1)}^2} - 1}}\,\sum\limits_{n =  - L\hfill\atop
+h{\phi _i} = {\left\{ \begin{array}{l}
+{p_1}{\phi _i}{({\phi _i})^{*t}} + {p_2}\frac{1}{{{{(2L + 1)}^2} - 1}}\,\sum\limits_{n =  - L\hfill\atop
 n \ne 0\hfill}^L {\sum\limits_{m =  - L\hfill\atop
-m \ne 0\hfill}^L {{\phi _i}^{(n,m)}{\phi _i}^{{{(n,m)}^{*t}}}} } + p(B)\,\frac{1}{{N - 1}}\,\sum\limits_{j = 1\hfill\atop
-j \ne i\hfill}^N {{\phi _j}{{({\phi _j})}^{*t}}} } \right\}^{ - 1}}\,{p_1}{\phi _i}
+m \ne 0\hfill}^L {{\phi _i}^{(n,m)}{\phi _i}^{{{(n,m)}^{*t}}}} } \\
+ + p(B)\,\frac{1}{{N - 1}}\,\sum\limits_{j = 1\hfill\atop
+j \ne i\hfill}^N {{\phi _j}{{({\phi _j})}^{*t}}} 
+\end{array} \right\}^{ - 1}}\,{p_1}{\phi _i}
 \end{equation}
 
 Por fim, temos que a Equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto interno utilizando análise de componentes principais proposto.
