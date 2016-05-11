@@ -99,9 +99,16 @@ A condição de existência do classificador projetado é que o primeiro termo da eq
               
 \section{Detector por Produto Interno utilizando Análise de Compomentes Principais (IPD-B-PCA)}
 
-Antes de apresentarmos a utilização de Detectores por Produto Interno aplicado a Análise de Componentes Principais precisamos fazer algumas definições. Entende-se por "Análise de Componentes Principais", também conhecida como  Transformada de \textit{Karhunen-Loève} \cite{schurmann1996pattern}, o procedimento matemático que faz uso de transformação ortogonal para a redução de dimensionalidade de um conjunto de variáveis. A ideia central dessa técnica é obter um menor número de componentes principais (combinações lineares) de um conjunto inicial de variáveis, onde podemos encontrar o maior volume de informações possíveis. Dessa maneira, utilizaremos essa técnica no projeto dos classificadores com o intuito de aumentar sua robustez.
+Entende-se por Análise de Componentes Principais (do inglês \textit{Principal Component Analysis} - PCA), também conhecida como  Transformada de \textit{Karhunen-Loève} \cite{schurmann1996pattern}, o procedimento matemático que faz uso de transformação ortogonal para o problema de redução de dimensionalidade. A ideia central dessa técnica é, dado um conjunto de  variáveis em um sistema de coordenadas qualquer representá-lo em outro (diferente) de forma a obter, com um menor número de combinações lineares (componentes principais), um maior número possível de informações contidas nas variáveis originais. Essa técnica também é utilizada em reconhecimento de padrões \cite{waldir2010facial}, e será utilizada no projeto dos classificadores com intuito de aumentar a sua robustez.
 
-Matematicamente o PCA pode ser exemplificado da seguinte forma: Seja $\mathcal{X}_{Nx1}$ uma variável aleatória com \textit{N} realizações iguais aos vetores $x_i$. Pretende-se encontrar a base do subespaço que possui a maior variância, definida como $\Phi  = \{ {\phi _1},...,\,{\phi _N}\}$ e obtida através da solução do problema de autovalores, mais especificamente:
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=1]{figuras/pca.PNG}
+\caption{Representação da Análise de Componentes Principais.}
+\label{fig_pca}
+\end{figure}
+
+Conforme pode ser obervado na \ref{fig_pca}, temos \textit{N} variáveis das quais desejamos extrair um número desejado de compontes principais. O PCA propõe uma projeção ortogonal de um vetor em um subespaço linear de menor dimensão que o original, de modo que a variância desse vetor seja a máxima possível. Matematicamente o PCA pode ser obtido da seguinte forma: Supondo um variável aleatória $\mathcal{X}_{N\text{x}1}$ com \textit{N} realizações iguais aos vetores $x_i$ a base do subespaço que possui a maior variância, definida como $\Phi  = \{ {\phi _1},...,\,{\phi _N}\}$, é obtida através da diagonalização da matriz de covariância $\sum\mathcal{X}$, onde são calculados os seus autovalores:
 
 \begin{equation}\label{eq_autovalores}
 \Lambda  = {\Phi ^{*t}}\sum\mathcal{X} \Phi
@@ -116,27 +123,25 @@ onde o sobrescrito $^{*t}$ indica o transposto conjugado da matriz e $\sum \math
 \label{fig_esquemaMatriz}
 \end{figure}
 
-Nesse ponto podemos definir o conceito de \textit{Eigenfaces} como sendo um conjunto de autovetores utilizados no problema de reconhecimento de faces. Esses autovetores são derivadas da matriz de covariância da distribuição de probabilidades referentes as imagens analisadas. A matriz de covariância de $\mathcal{X}$ é dada por:
+Para o nosso sistema a base $\Phi  = [{\phi _1},\,...,\,{\phi _N}]$ são os \textit{Eigenpoints}, ou seja, blocos ${\mathcal{X}_i}$ que representam características salientes da face humana denominados pontos fiduciais (em inglês, \textit{fiducial point}), conforme pode ser observado na Figura \ref{fig_esquemaMatriz}. A diagonal principal da matriz $\Lambda$ (${\lambda _1},\,...,\,{\lambda _N}$) correspondem aos autovetores da Equação \eqref{eq_autovalores}. Os autovetores são derivadas da matriz de covariância. A matriz de covariância de $\mathcal{X}$ é dada por:
 
 \begin{equation}\label{eq_MatrizDeCovariancia}
 \sum {_X = \frac{1}{{M - 1}}X{X^{*t}}}
 \end{equation}
 
-Onde \textit{X} é uma matriz formada por M vetores, com M>N (sendo M o número de realizações da variável aleatória $\mathcal{X}_Nx1$) da seguinte forma:
+Onde  $\mathcal{X}$ é uma matriz formada por M vetores, com M>N (sendo M o número de realizações da variável aleatória $\mathcal{X}_{N\text{x}1}$) da seguinte forma:
 
 \begin{equation}\label{eq_MatrizX}
 X = [{x_1} - {\mu _x},...,{x_M} - {\mu _x}]
 \end{equation}
 
-Cada vetor $\mu_{i}$ será obtido concatenando as colunas do bloco \textit{i} cujo o centro é ponto fiducial de interesse. A equação $\mu_x$ é dada por:
+Onde $\mu_x$ é dado por:
 
 \begin{equation}\label{eq_mi}
 {\mu _x} = \frac{1}{M}\sum\limits_{i = 1}^M {{x_i}}
 \end{equation}
 
-a diagonal principal da matriz da equação \eqref{eq_autovalores}, correspondem aos autovetores ${\lambda _1},...,\,{\lambda _N}$, conforme pode ser observado na Figura \ref{fig_esquemaMatriz}
-
-Tendo em vista as equações apresentadas bem como o esquema observado na Figura \ref{fig_esquemaMatriz}, faz-se necessário a separação da componente $\phi$ e a rejeição das demais, tendo em vista que se trata de pontos fora da região de interesse. Com o intuito de melhor classificar essas componentes separou-se em três classes distintas, são elas: $\mathcal{A}_1$, $\mathcal{A}_2$ e $\mathcal{B}$, onde:
+Tendo em vista as equações apresentadas bem como o esquema observado na Figura \ref{fig_esquemaMatriz}, faz-se necessário discriminar os autovalores $\phi$ e rejeitar os demais, tendo em vista que se trata de pontos fora da região de interesse. Com o intuito de melhor classificar essas componentes separou-se em três classes distintas, são elas: $\mathcal{A}_1$, $\mathcal{A}_2$ e $\mathcal{B}$, onde:
 
 \begin{description}
   \item[$\bullet$ $\mathcal{A}_1$] Refere-se a classe dos componentes que desejamos detectar ($\mathcal{A}_1=\phi$)
