@@ -101,10 +101,42 @@ A condição de existência do classificador projetado é que o primeiro termo da eq
 
 A ideia principal de mesclar filtros discriminativos junto à Análise de Componentes Principais (do inglês \textit{Principal Component Analysis - PCA}) é desenvolver um classificador mais robusto. Os filtros discriminativos são lineares, logo, pequenas alterações nos padrões desejados (ou seja, padrões próximos aos desejados) produzem apenas pequenas perturbações na saída \cite{waldir2010facial}, porém projetando-se uma nova classe de detectores baseados em componentes principais  ({\color{red}seção XX - mencionaria se tivesse escrito}) a exclusão de padrões que não são de interesse se dá de forma mais confiável, pois o classificador possui tolerância a pequenas variações.
 
-Conforme foi definida na seção {\color{red}seção XX (seção que fala sobre PCA}) o cálculo do PCA é dado pela equação \eqref{eq_autovalores} e levando-se em consideração todo o conceito de IPD, apresentado na seção \ref{sec_IPD}, supondo a representação de uma variável aleatória que pode ser classificadas nas classes {${A},\,{B},\,...,\,{Z}$} onde desejamos detectar os padrões referentes a classe A. 
+Conforme foi definida na {\color{red}seção XX (seção que fala sobre PCA}) o cálculo do PCA é dado pela equação $\Lambda  = {\Phi ^{*t}}\sum\mathcal{X} \Phi$ ({\color{red}coloquei a equação porém acho mais interessante escrever uma seção sobre PCA e só fazer uma referência a Equação aqui}) e levando-se em consideração todo o embasamento de IPD apresentado na seção \ref{sec_IPD}, podemos fundir ambos da seguinte forma: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${A_1},\,{A_2},\,...,\,{A_N}$\} onde desejamos detectar os padrões referentes a classe $A_1$ utilizando o classificador da Equação \eqref{eq_probabilidades}. Levando-se em consideração o erro quadrático chegou-se a Equação \eqref{vetorH} conforme foi explicado, aplicando-a a nosso exemplo teremos:
 
-\begin{equation}\label{eq_autovalores}
-\Lambda  = {\Phi ^{*t}}\sum\mathcal{X} \Phi
+\begin{equation}\label{eq_componente_1}
+E[x{x^t}] = \sum\limits_{i = 1}^N {p({A_i})} {R_{Ai}}
 \end{equation}
+\begin{equation}\label{eq_componente_2}
+E[xc] = p({A_1}){\mu _{A1}}
+\end{equation}
+
+Onde $R_{Ai}$ é a matriz de autocorrelação e $p({A_1}){\mu _{A1}}$ são respectivamente a probabilidade e a média da classe ${A_1}$. Substituindo-se as Equações \eqref{eq_componente_1} e \eqref{eq_componente_2} na Equação \eqref{vetorH} temos:
+
+\begin{equation}\label{eq_vetorh_ipd}
+{h_{A1}} = {\left( {\sum\limits_{i = 1}^N {p({A_i}){R_{Ai}}} } \right)^{ - 1}}p({A_1})\mu {A_1}
+\end{equation}
+
+Agora imaginemos o seguinte, a classe $A_1$ ($A_1 = \phi_i$) é exatamente a classe a qual desejamos discriminar, e a classe $A_2$ seria uma classe muito próxima a $A_1$ deslocada de \textit{n} pixels na direção horizontal e \textit{m} na vertical, iremos denotar esse deslocamento através da notação $\phi _i^{n,m}$ assim ${A_2} = \{ \phi _i^{n,m}$, onde: $- L \le \,m,n\, \le \,L$, com $n,m \ne \,0\}$. Onde \textit{L} corresponde ao máximo deslocamento {\color{red}(Dúvida nesse ponto}). Podemos observar esse esquema na Figura \ref{fig_deslocamento}, onde temos a esquerda a componente \textit{$A_1$} formada por blocos de dimensões \textit{2L+1}, os seus deslocamentos lineares $\phi _i^{n,m}$ serão determinados através da componente principal $\widetilde {{\phi _i}}$. Dessa forma, para determinarmos a classe ${\mathcal{A}_2}$ devemos  calcular $\phi_i$ com blocos de dimensões \textit{4L+1}, ou seja, os blocos $\phi _i^{n,m}$ tratam-se de janelas deslizantes de $\phi_i$.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{figuras/DeslocamentoLinear.png}
+\caption{Desclocamento linear}
+\label{fig_deslocamento}
+\end{figure}
+
+Reescrevendo a Equação \eqref{eq_vetorh_ipd} sabendo-se que ${\mathcal{A}_1}$ será formada pela componente a qual desejamos detectar, ${\mathcal{A}_2}$ formada por deslocamentos lineares de $\phi_i$ e ${\mathcal{A}_N}$ as demais classes, temos:
+
+\begin{equation} \label{eq_IPD-B-PCA_Final}
+h{\phi _i} = {\left\{ \begin{array}{l}
+{p_1}{\phi _i}{({\phi _i})^{*t}} + {p_2}\frac{1}{{{{(2L + 1)}^2} - 1}}\,\sum\limits_{n =  - L\hfill\atop
+n \ne 0\hfill}^L {\sum\limits_{m =  - L\hfill\atop
+m \ne 0\hfill}^L {{\phi _i}^{(n,m)}{\phi _i}^{{{(n,m)}^{*t}}}} } \\
+ + p(\mathcal{A}_N)\,\frac{1}{{N - 1}}\,\sum\limits_{j = 1\hfill\atop
+j \ne i\hfill}^N {{\phi _j}{{({\phi _j})}^{*t}}} 
+\end{array} \right\}^{ - 1}}\,{p_1}{\phi _i}
+\end{equation}
+
+Finalmente, a Equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto interno utilizando análise de componentes principais. É interessante percebermos que se considerássemos somente as classes padrões incorreríamos em um possível erro de discriminar classes próximas as desejáveis, porém com a adição da classe ${\mathcal{A}_2}$ podemos dar mais robustez ao classificador e rejeitar pequenos deslocamentos lineares de forma mais precisa e com uma maior eficiência.
                       
 \section{Programação Paralela - OPENMP}
