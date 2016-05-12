@@ -1,6 +1,6 @@
 \chapter{Fundamentos Teóricos}\label{cap-fundamentos}
 
-\section{Detectores por Produto Interno com Minimização do Erro Quadrático Médio (IPD)}
+\section{Detectores por Produto Interno com Minimização do Erro Quadrático Médio (IPD)} \label{sec_IPD}
                
 O projeto do classificador utilizando detector por produto interno pode ser feito da seguinte forma: suponhamos uma variável aleatória, ou seja, uma variável cujo os seus resultados sejam imprevisíveis, $X_{dx1}$. Suas realizações podem ser classificadas nas classes {${A_1},\,{A_2},\,...,\,{A_n}$} ou na classe B, sendo que a classe ${A_i}$ representa os padrões que desejamos encontrar e B representa os demais padrões que não seja de interesse. As probabilidades de encontrarmos essas classes são dadas por:
                  
@@ -98,5 +98,13 @@ Considerando-se a matriz de autocorrelação de $B$ igual a $R_B$ e a matriz $A_i$
 A condição de existência do classificador projetado é que o primeiro termo da equação \eqref{vetorH_final} seja uma matriz inversível e a dimensão dos vetores de entrada deve ser menor que a soma dos números de elementos de todas as classes $A_j$ e B, ou seja $d \le \,r\, + \,\sum\limits_{j = 1}^n {{L_j}}$.
               
 \section{Detector por Produto Interno utilizando Análise de Compomentes Principais (IPD-B-PCA)}
+
+A ideia principal de mesclar filtros discriminativos junto à Análise de Componentes Principais (do inglês \textit{Principal Component Analysis - PCA}) é desenvolver um classificador mais robusto. Os filtros discriminativos são lineares, logo, pequenas alterações nos padrões desejados (ou seja, padrões próximos aos desejados) produzem apenas pequenas perturbações na saída \cite{waldir2010facial}, porém projetando-se uma nova classe de detectores baseados em componentes principais  ({\color{red}seção XX - mencionaria se tivesse escrito}) a exclusão de padrões que não são de interesse se dá de forma mais confiável, pois o classificador possui tolerância a pequenas variações.
+
+Conforme foi definida na seção {\color{red}seção XX (seção que fala sobre PCA}) o cálculo do PCA é dado pela equação \eqref{eq_autovalores} e levando-se em consideração todo o conceito de IPD, apresentado na seção \ref{sec_IPD}, supondo a representação de uma variável aleatória que pode ser classificadas nas classes {${A},\,{B},\,...,\,{Z}$} onde desejamos detectar os padrões referentes a classe A. 
+
+\begin{equation}\label{eq_autovalores}
+\Lambda  = {\Phi ^{*t}}\sum\mathcal{X} \Phi
+\end{equation}
                       
 \section{Programação Paralela - OPENMP}
