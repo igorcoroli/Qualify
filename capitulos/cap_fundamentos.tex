@@ -144,4 +144,29 @@ j \ne i\hfill}^N {{\phi _j}{{({\phi _j})}^{T}}}
 
 Finalmente, a Equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto interno utilizando análise de componentes principais. É interessante destacarmos que na construção dos padrões de interesse da classe $\mathcal{A}_1$ podemos utilizar componentes levemente rotacionados ou deslocados, dessa forma é possível construir detectores mais robustos. A classe ${\mathcal{A}_2}$ é de fundamental importância, uma vez que se considerássemos somente as classes padrões ($\mathcal{A}_1$) poderíamos incorrer em um possível erro e detectar algo próximo ao padrão mesmo não sendo. Esse fato, deve-se a linearidade dos filtros, portanto, pequenas alterações na entrada produzem apenas pequenas perturbações na saída. Assim, a adição da classe ${\mathcal{A}_2}$ permite ao classificador rejeitar pequenos deslocamentos lineares de forma mais precisa e com uma maior eficiência.
                       
-\section{Programação Paralela - OPENMP}
+\section{Programação Paralela}
+
+Com o desenvolvimento da informática em diversos campos houve uma exigência por um maior poder de processamento por parte dos programas. \textit{Softwares} tornaram-se mais sofisticados e computacionalmente mais pesados, assim os processadores começaram a ficar obsoletos face à essa excesso de demanda por processamento. A solução encontrada no início foi acelerar o relógio do processador, porém, com essa aceleração apareceu o problema do superaquecimento desses chips. A solução para esse problema veio com a adição de mais de um núcleo no mesmo \textit{chip}, através da tecnologia \textit{multicore}. Dessa forma, eliminaria-se a necessidade de cada núcleo trabalhar em frequências muito elevadas, tendo somente como base um esquema de escalonamento de tarefas mais eficiente \cite{tanenbaum2013sistemas}.
+
+A ideia desse paradigma de programação é "quebrar" o programa em várias partes e processá-los de forma concorrente (paralela), ganhando assim tempo na execução da tarefa. É interessante notarmos que nem todas as partes de um programa são "paralelizáveis", portanto para esse tipo de aplicação a existência de um ou mais núcleos não resultará na celeridade de sua execução. O paralelismo pode ser explícito quando o próprio programador controla a concorrência ou implícito, quando cabe ao compilador do sistema realizar o paralelismo.
+
+Existem diversos tipos de paralelismo, podermos destacar: 
+
+\begin{itemize}
+\item \textbf{No bit}: Nesse tipo dobrava-se o tamanho da palavra (unidade de informação utilizada para cada tipo de computador), com isso dobrava-se a quantidade de processamento por ciclo e consequentemente a diminuição da quantidade de instruções;
+
+\item \textbf{Na instrução}: Assumindo que um programa de computador são um conjunto de instruções interpretados pelo processador, pode-se combinar esse conjunto de instruções em blocos que podem ser executados de forma concorrente sem alterar o resultado final;
+
+
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
