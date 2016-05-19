@@ -155,9 +155,13 @@ Existem diversos tipos de paralelismo, podermos destacar:
 \begin{itemize}
 \item \textbf{No bit}: Nesse tipo dobrava-se o tamanho da palavra (unidade de informação utilizada para cada tipo de computador), com isso dobrava-se a quantidade de processamento por ciclo e consequentemente a diminuição da quantidade de instruções;
 
-\item \textbf{Na instrução}: Assumindo que um programa de computador são um conjunto de instruções interpretados pelo processador, pode-se combinar esse conjunto de instruções em blocos que podem ser executados de forma concorrente sem alterar o resultado final;
+\item \textbf{Na instrução}: Assumindo que um programa de computador é constituído por um conjunto de instruções interpretados pelo processador, pode-se combinar essas instruções em blocos que podem ser executados de forma concorrente sem alterar o resultado final;
 
+\item \textbf{No dado}: Geralmente ocorre em laços (\textit{loops}), nas quais uma interação depende de outros resultados;
 
+\item \textbf{No tarefa}: É inerente as aplicações (programas), caracteriza-se ao oposto do paralelismo em dados, ou seja, diferentes cálculos podem ser realizados no mesmo ou em diferentes tipos de dados;
+
+Um ponto crucial para se obter um alto desempenho na computação paralela tange no que diz respeito ao acesso da memória.
 
 \end{itemize}
 
