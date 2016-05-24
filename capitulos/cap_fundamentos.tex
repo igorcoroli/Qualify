@@ -163,30 +163,31 @@ Existem diversos tipos de paralelismo, podermos destacar:
 
 Um ponto crucial para se obter um alto desempenho na computação paralela tange no que diz respeito ao acesso da memória. Existem duas arquiteturas quanto as formas de acesso a memória:
 
-\item \textbf{Centralized Multiprocessor ou Uniform Memory Access Multiprocessor (UMA)}: Nesse modelo as tarefas compartilham de um mesmo espaço de memória e a comunicação é mais simples, pois utiliza-se de uma área comum na memória (Figura \ref{fig_Compartilhada});
+\item \textbf{Centralized Multiprocessor ou Uniform Memory Access Multiprocessor (UMA)}: Nesse modelo as tarefas compartilham de um mesmo espaço de memória e a comunicação é mais simples, pois utiliza-se de uma área comum na memória (Figura \ref{fig_Compartilhada} a);
 
-\item \textbf{Distributed Multiprocessor ou Nonuniform Memory Access Multiprocessor (NUMA)}: Nesse padrão cada processador possui o seu próprio endereço na memória. A comunicação entre esses processadores é feito através de mensagens (Figura \ref{fig_Ditribuida}). {\color{red} Eu vou concatenar as duas Figuras em uma só. Só não fiz porque ainda não acertei como se faz})
-
+\item \textbf{Distributed Multiprocessor ou Nonuniform Memory Access Multiprocessor (NUMA)}: Nesse padrão cada processador possui o seu próprio endereço na memória. A comunicação entre esses processadores é feito através de mensagens (Figura \ref{fig_Ditribuida} b). {\color{red} Eu vou concatenar as duas Figuras em uma só. Só não fiz porque ainda não acertei como se faz})
 \end{itemize}
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=0.8]{figuras/Tipos_Memorias_Shared.PNG}
-\caption{Memória compartilhada}
-\label{fig_Compartilhada}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=0.8]{figuras/Tipos_Memorias.PNG}
-\caption{Memória distribuída}
-\label{fig_Ditribuida}
+\begin{figure}[h]
+\center
+\subfigure[Memórica compartilhada - UMA]{\includegraphics[width=7cm]{figuras/Tipos_Memorias_Shared.PNG}}\label{fig_Compartilhada}
+\qquad
+\subfigure[Memórica compartilhada - NUMA]{\includegraphics[width=7cm]{figuras/Tipos_Memorias.PNG}}
+\caption{Arquiteturas de computação paralela a) Memória compartilhada e b) memória distribuída.}\label{fig_Ditribuida}
 \end{figure}
 
 
 \subsection{OpenMP}
 
-{\color{red} A idéia aqui é falar um pouco sobre os outros métodos mas apronfundar no OpenMP e mostrar os "possíveis" usos e/ou compatibilidade com sistemas embarcados, pricipalmente no Android (já achei um artigo sobre isso)}
+Quanto ao paralelismo, podemos destacar duas formas: o paralelismo explícito e o paralelismo implícito. A seguir destacamos algumas características de cada uma:
+
+\begin{itemize}
+\item \textbf{paralelismo explícito}:
+
+\item \textbf{paralelismo implícito}:
+
+\end{itemize}
+
 
 \subsection{Métricas de desempenho na Computação Paralela}
 
