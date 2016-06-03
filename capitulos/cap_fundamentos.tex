@@ -99,9 +99,15 @@ A condição de existência do classificador projetado é que o primeiro termo da eq
               
 \section{Detector por Produto Interno utilizando Análise de Componentes Principais (IPD-B-PCA)}
 
-O Detector por Produto Interno (DPI) nada mais é que um classificador construído a partir de um treinamento de imagens previamente selecionadas. Esses classificadores são considerados rápidos por realizarem a classificação através de uma operação simples de produto interno, além de minimizarem o erro quadrático \cite{waldir}. Com o intuito de aumentar sua robustez a pequenas rotações, acrescentamos a técnica de Análise de Componentes Principais, {\color{red}vista na seção XY} (do inglês, Principal Component Analysis - PCA, {\color{red}se eu já tiver falado anteriormente não vai precisar desse parêntese}).
+O Detector por Produto Interno (DPI) nada mais é que um classificador construído a partir de um treinamento de imagens previamente selecionadas. Esses classificadores são considerados rápidos por realizarem a classificação através de uma operação simples de produto interno, além de minimizarem o erro quadrático \cite{waldir}. Com o intuito de aumentar sua robustez a pequenas rotações, Sabino  \cite{waldir} acrescentou a técnica de Análise de Componentes Principais, {\color{red}vista na seção XY} (do inglês, Principal Component Analysis - PCA, {\color{red}se eu já tiver falado anteriormente não vai precisar desse parêntese}).
 
 Segundo Sabino \cite{waldir}, a principal motivação para a aplicação da técnica de PCA reside no fato de que os padrões analisados (faces, por exemplo) não são distribuídos de forma aleatória, e mesmo essas estando distribuídas em um espaço de dimensão elevada podem ser representadas por um subespaço de menor dimensão. O conjunto dessas componentes principais são denominadas \textit{eigenfaces} (o termo \textit{eigenfaces} deve-se ao fato da representação das faces através dos autovetores do conjunto de faces).
+
+\subsection{\textit{Eigenfaces} e \textit{Eigenpoints}}
+
+O termo \textit{eigenfaces} refere-se a um algoritmo que faz uso do padrão comum existente nas faces para representá-los em um subespaço de dimensão inferior ao original, ou seja, a partir de diversas faces com pequenas inclinações podemos gerar um único "template" que corresponde a representação de todos.
+
+Matematicamente podemos obter as \textit{eigenfaces}
 
 Conforme foi definida na {\color{red}seção XX (seção que fala sobre PCA}) o cálculo do PCA é dado pela equação \eqref{eq_autovalores} e levando-se em consideração as características do IPD apresentado na seção \ref{sec_IPD}, podemos fundir ambos da seguinte forma: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${A_1},\,{A_2},\,...,\,{A_N}$\} onde desejamos detectar os padrões referentes a classe $A_1$ utilizando o classificador da equação \eqref{vetorH_final} que, por comodidade, é reescrita abaixo. 
 \begin{equation}\label{eq_autovalores}
