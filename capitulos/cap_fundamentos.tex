@@ -103,11 +103,50 @@ O Detector por Produto Interno (DPI) nada mais é que um classificador construído
 
 Segundo Sabino \cite{waldir}, a principal motivação para a aplicação da técnica de PCA reside no fato de que os padrões analisados (faces, por exemplo) não são distribuídos de forma aleatória, e mesmo essas estando distribuídas em um espaço de dimensão elevada podem ser representadas por um subespaço de menor dimensão. O conjunto dessas componentes principais são denominadas \textit{eigenfaces} (o termo \textit{eigenfaces} deve-se ao fato da representação das faces através dos autovetores do conjunto de faces).
 
-\subsection{\textit{Eigenfaces} e \textit{Eigenpoints}}
+\subsection*{\textit{Eigenfaces} e \textit{Eigenpoints}}
 
-O termo \textit{eigenfaces} refere-se a um algoritmo que faz uso do padrão comum existente nas faces para representá-los em um subespaço de dimensão inferior ao original, ou seja, a partir de diversas faces com pequenas inclinações podemos gerar um único "template" que corresponde a representação de todos.
+O termo \textit{eigenfaces} refere-se a um algoritmo que faz uso do padrão comum existente nas faces para representá-los em um subespaço de dimensão inferior ao original, ou seja, a partir de diversas faces com pequenas inclinações podemos gerar um único "template"\ que corresponde a representação de todos. Quando aliamos essa técnica ao IPD conseguimos um classificador mais robusto a pequenas rotações.
 
-Matematicamente podemos obter as \textit{eigenfaces}
+Matematicamente podemos obter as \textit{eigenfaces} como sendo \textit{M} realizações de uma variável aleatória $\mathcal{X}_{Nx1}$ iguais a $x_{\textit{i}}$. Cada coluna $x_{\textit{i}}$ contém os \textit{pixels} de uma imagem da face ${\gamma_\textit{i}}$, onde \textit{i} = \{1,..., M\}. Dessa forma, \textbf{X} é uma matriz formada por \textit{M} vetores (sendo \textit{M} > \textit{N}) da seguinte forma:
+
+\begin{equation}
+X = [{x_1} - {\mu _\mathcal{X}},\,...,\,{x_M} - {\mu _\mathcal{X}}]
+\end{equation}
+
+Onde $\mu _\mathcal{X}$ é:
+
+\begin{equation}
+{\mu _\mathcal{X}} = \frac{1}{M}\sum\limits_{i = 1}^M {{x_\textit{i}}}
+\end{equation}
+
+A matriz de covariância de $\mathcal{X}$, $\sum\nolimits_\mathcal{X}$ é dada por:
+
+\begin{equation}
+\sum\nolimits_\mathcal{X}  =  \frac{1}{{M - 1}}X{X^T}
+\end{equation}
+
+Dessa forma, a base que contém as \textit{N} componentes principais descorrelacionadas (\textit{eingenfaces}) é encontrada através da diagonalização da matriz $\sum\nolimits_\mathcal{X}$, assim:
+
+\begin{equation}
+\Lambda  = {\Phi ^T}\sum\nolimits_\mathcal{X} \Phi
+\end{equation}
+
+onde $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetores de $\sum\nolimits_\mathcal{X}$ e $\Lambda$ é a matriz diagonal contendo os valores de $\sum\nolimits_\mathcal{X}$, onde cada autovalor ${\lambda _\textit{i}}$ tem uma variância maior ou igual ao seu sucessor, ou seja, ${\lambda _1} \ge {\lambda _2} \ge ... \ge {\lambda _N}$. Dessa forma é possível selecionar os "melhores"\ componentes através dos autovalores ${\lambda _i}$. Assim, podemos dizer que o método PCA e os \textit{eingenfaces} são as \textit{k} componentes principais de $\Phi_{\textit{i}}$.
+
+Nesse contexto podemos utilizar esse raciocínio para ao invés de faces tratar características salientes comum as faces (canto da boca, olho, nariz, etc), a esses atributos damos o nome de pontos fiduciais (do inglês, \textit{fiducial point}). Quando aplicamos a teoria de \textit{eigenfaces} aos pontos fiduciais obteremos os \textit{eigenpoints}. O procedimento matemático para obtermos os \textit{eigenpoints} é o mesmo dos \textit{eigenfaces}, bastando somente delimitar os \textit{pixels} em blocos centrados no ponto fiducial de interesse. As Figuras \ref{fig:eigenfacesEx} e \ref{fig:eigenpointsEx} ilustram os dois métodos.
+
+\begin{figure}[h]
+\subfigure[Exemplos de \textit{eigenfaces}]{
+\includegraphics[width=7.15cm,height=2cm]{figuras/eigenfacesEx.png}
+\label{fig:eigenfacesEx}
+}
+\subfigure[Exemplos de \textit{eigenpoints}]{
+\includegraphics[width=7.15cm,height=2cm]{figuras/eigenPointsEx.png}
+\label{fig:eigenpointsEx}}
+\caption{Exemplos de \textit{eigenfaces}  à direita e a esquerda temos \textit{eigenpoints} extraídos a partir de blocos centrados a partir do olho direito das imagens das faces.}
+\end{figure}
+
+\subsection*{Formulação do IPD-B-PCA}
 
 Conforme foi definida na {\color{red}seção XX (seção que fala sobre PCA}) o cálculo do PCA é dado pela equação \eqref{eq_autovalores} e levando-se em consideração as características do IPD apresentado na seção \ref{sec_IPD}, podemos fundir ambos da seguinte forma: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${A_1},\,{A_2},\,...,\,{A_N}$\} onde desejamos detectar os padrões referentes a classe $A_1$ utilizando o classificador da equação \eqref{vetorH_final} que, por comodidade, é reescrita abaixo. 
 \begin{equation}\label{eq_autovalores}
