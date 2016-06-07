@@ -99,7 +99,7 @@ A condição de existência do classificador projetado é que o primeiro termo da eq
               
 \section{Detector por Produto Interno utilizando Análise de Componentes Principais (IPD-B-PCA)}
 
-O Detector por Produto Interno (DPI) nada mais é que um classificador construído a partir de um treinamento de imagens previamente selecionadas. Esses classificadores são considerados rápidos por realizarem a classificação através de uma operação simples de produto interno, além de minimizarem o erro quadrático \cite{waldir}. Com o intuito de aumentar sua robustez a pequenas rotações, Sabino  \cite{waldir} acrescentou a técnica de Análise de Componentes Principais, {\color{red}vista na seção XY} (do inglês, Principal Component Analysis - PCA, {\color{red}se eu já tiver falado anteriormente não vai precisar desse parêntese}).
+O Detector por Produto Interno (do inglês, \textit{Inner Product Detector} - IPD) nada mais é que um classificador construído a partir de um treinamento de imagens previamente selecionadas. Esses classificadores são considerados rápidos por realizarem a classificação através de uma operação simples de produto interno, além de minimizarem o erro quadrático \cite{waldir}. Com o intuito de aumentar sua robustez a pequenas rotações, Sabino  \cite{waldir} acrescentou a técnica de Análise de Componentes Principais (do inglês, Principal Component Analysis - PCA).
 
 Segundo Sabino \cite{waldir}, a principal motivação para a aplicação da técnica de PCA reside no fato de que os padrões analisados (faces, por exemplo) não são distribuídos de forma aleatória, e mesmo essas estando distribuídas em um espaço de dimensão elevada podem ser representadas por um subespaço de menor dimensão. O conjunto dessas componentes principais são denominadas \textit{eigenfaces} (o termo \textit{eigenfaces} deve-se ao fato da representação das faces através dos autovetores do conjunto de faces).
 
@@ -131,7 +131,7 @@ Dessa forma, a base que contém as \textit{N} componentes principais descorrelaci
 \Lambda  = {\Phi ^T}\sum\nolimits_\mathcal{X} \Phi
 \end{equation}
 
-onde $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetores de $\sum\nolimits_\mathcal{X}$ e $\Lambda$ é a matriz diagonal contendo os valores de $\sum\nolimits_\mathcal{X}$, onde cada autovalor ${\lambda _\textit{i}}$ tem uma variância maior ou igual ao seu sucessor, ou seja, ${\lambda _1} \ge {\lambda _2} \ge ... \ge {\lambda _N}$. Dessa forma é possível selecionar os "melhores"\ componentes através dos autovalores ${\lambda _i}$. Assim, podemos dizer que o método PCA e os \textit{eingenfaces} são as \textit{k} componentes principais de $\Phi_{\textit{i}}$.
+onde $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetores de $\sum\nolimits_\mathcal{X}$, o sobrescrito \textit{T} indica o transposto da matriz de covariância e $\Lambda$ é a matriz diagonal contendo os valores de $\sum\nolimits_\mathcal{X}$, onde cada autovalor ${\lambda _\textit{i}}$ tem uma variância maior ou igual ao seu sucessor, ou seja, ${\lambda _1} \ge {\lambda _2} \ge ... \ge {\lambda _N}$. Dessa forma é possível selecionar os "melhores"\ componentes através dos autovalores ${\lambda _i}$. Assim, podemos dizer que o método PCA e os \textit{eingenfaces} são as \textit{k} componentes principais de $\Phi_{\textit{i}}$.
 
 Nesse contexto podemos utilizar esse raciocínio para ao invés de faces tratar características salientes comum as faces (canto da boca, olho, nariz, etc), a esses atributos damos o nome de pontos fiduciais (do inglês, \textit{fiducial point}). Quando aplicamos a teoria de \textit{eigenfaces} aos pontos fiduciais obteremos os \textit{eigenpoints}. O procedimento matemático para obtermos os \textit{eigenpoints} é o mesmo dos \textit{eigenfaces}, bastando somente delimitar os \textit{pixels} em blocos centrados no ponto fiducial de interesse. As Figuras \ref{fig:eigenfacesEx} e \ref{fig:eigenpointsEx} ilustram os dois métodos.
 
@@ -148,34 +148,36 @@ Nesse contexto podemos utilizar esse raciocínio para ao invés de faces tratar ca
 
 \subsection*{Formulação do IPD-B-PCA}
 
-Conforme foi definida na {\color{red}seção XX (seção que fala sobre PCA}) o cálculo do PCA é dado pela equação \eqref{eq_autovalores} e levando-se em consideração as características do IPD apresentado na seção \ref{sec_IPD}, podemos fundir ambos da seguinte forma: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${A_1},\,{A_2},\,...,\,{A_N}$\} onde desejamos detectar os padrões referentes a classe $A_1$ utilizando o classificador da equação \eqref{vetorH_final} que, por comodidade, é reescrita abaixo. 
-\begin{equation}\label{eq_autovalores}
-\Lambda  = {\Phi ^T}\sum\nolimits_{\mathcal{_X}}\Phi
-\end{equation}
-\begin{equation*}
-{h_{Ai}} = {\{ p(B){R_B} + \sum\limits_{j = 1}^n {{p_j}{R_{Aj}}} \} ^{ - 1}}\{\sum\limits_{i = 1}^m {{p_i}{\mu _{Ai}}}\}
-\end{equation*}
+O método proposto por Sabino \cite{waldir} consiste em aumentar a robustez dos filtros discriminativos através das componentes principais de maior energia, ou seja, cujos autovalores associados são maiores. Matematicamente podemos obter esses filtros da seguinte maneira: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${\mathcal{A}_1},\,{\mathcal{A}_2},\,...,\,{\mathcal{A}_N}$\} onde: 
 
-Onde sobrescrito \textit{T} (equação \eqref{eq_autovalores})indica o transposto da matriz de covariância. Antes de prosseguirmos faremos a seguinte aproximação: i) Seja $\textit{A}_{1}$ a classe desejada, ii) Seja $\textit{A}_{2}$ uma classe muito próxima a classe $\textit{A}_{1}$, iii) seja $\textit{B}$ todas as demais classes, ou seja, classes que estão fora da região de interesse. Utilizando a equação \eqref{vetorH_final} para determinarmos o  detector por produto interno para as componentes principais, obtemos:
+\begin{itemize}
+\item A classe ${\mathcal{A}_1}$ será composta pela componente que desejamos detectar (${\mathcal{A}_1=\{\phi _i\}}$);
+
+\item A classe ${\mathcal{A}_2}$ refere-se a deslocamentos lineares de $\phi _i$. A expressão $\phi _i^{n,m}$ relaciona o deslocamento linear da componente \textit{i} em \textit{n} \textit{pixels} na direção horizontal e \textit{m} na vertical. Considerando-se blocos quadrados de tamanho \textit{L} em que o centro do bloco contém o ponto fiducial de interesse, podemos escrever ${\mathcal{A}_2} = \{ \phi _i^{n,m}$, onde: $- L \le \,m,n\, \le \,L$, com $n,m \ne \,0\}$ .
+
+\item A classe $\mathcal{B}$ será composta pelas demais componentes $\phi _j$, ou seja, as classes \{ ${\mathcal{A}_3},\,{\mathcal{A}_4},\,...,\,{\mathcal{A}_N}$\}.
+\end{itemize}
+
+Para projetarmos o nosso classificador utilizaremos a equação \eqref{vetorH_final}, levando-se em consideração as premissas citadas teremos:
 
 \begin{equation}\label{eq_ipd_pca}
 {h_{{\phi _1}}} = {\left\{ {{p_1}{R_{A1}} + {p_2}{R_{A2}} + {p_B}{R_B}} \right\}^{ - 1}}\,{p_1}{R_{A1}}
 \end{equation}
 
-A Figura \ref{fig_ipd_pca} ilustra o esquema proposto, onde temos \textit{S} \textit{eigenpoints} ($\Phi  = \,{\phi _1},\,{\phi _2},\,...,\,{\phi _S}$), para cada um será projetado um filtro, de forma que estejam disposto do maior para o menor valor de variância (autovalores), desse modo, ${\lambda _1} > \,{\lambda _2} > ,...,\,{\lambda _S}$. Assumindo, que no nosso exemplo, a classe $A_1$ é formada pela componente a qual desejamos detectar ($A_1 = \phi_i$), a classe  \textit{B} seja os padrões fora da região de interesse, portanto descartados e a classe $A_2$ como sendo uma classe $A_1$ deslocada de \textit{n} \textit{pixels} na direção horizontal e \textit{m} na vertical, iremos denotar esse deslocamento através da notação $\phi _i^{n,m}$ assim ${A_2} = \{ \phi _i^{n,m}$, onde: $- L \le \,m,n\, \le \,L$, com $n,m \ne \,0\}$. Onde \textit{L} corresponde ao máximo deslocamento.
+A Figura \ref{fig_ipd_pca} ilustra o esquema proposto, onde temos \textit{S} \textit{eigenpoints} ($\Phi  = \,{\phi _1},\,{\phi _2},\,...,\,{\phi _S}$), para cada um será projetado um filtro, de forma que estejam disposto do maior para o menor valor de variância (autovalores), desse modo, ${\lambda _1} > \,{\lambda _2} > ,...,\,{\lambda _S}$.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[scale=0.5]{figuras/eigenPoints.png}
-\caption{\textit{S} detectores por produto interno para \textit{S} componentes principais.}
+\includegraphics[scale=0.9]{figuras/esquema_Matriz.png}
+\caption{\textit{S} classificadores para \textit{S} componentes principais.}
 \label{fig_ipd_pca}
 \end{figure}
 
-Na Figura \ref{fig_schema}, podemos observar um \textit{eigenpoint} que refere-se ao olho direito considerando-se a primeira componente principal. A componente $\phi_1$ foi calculada através de blocos de dimensão 2L+1 (imagem mais à esquerda). Afim de obtermos a componente $\phi_2$ através de deslocamentos lineares até o meio do bloco calculamos $\mathop {{\phi _i}}\limits^ \sim$ para blocos de dimensão 4L+1 (imagem mais a direita). Assim, reescrevendo a Equação \eqref{eq_ipd_pca} em função dessas ponderações teremos:
+Na Figura \ref{fig_schema}, podemos observar um \textit{eigenpoint} que refere-se ao olho direito considerando-se apenas a primeira componente principal. A componente $\phi_1$ foi calculada através de blocos de dimensão 2L+1 (imagem mais à esquerda). Afim de obtermos a componente $\phi_2$ através de deslocamentos lineares até o meio do bloco calculamos $\mathop {{\phi _i}}\limits^ \sim$ para blocos de dimensão 4L+1 (imagem mais a direita). Assim, reescrevendo a Equação \eqref{eq_ipd_pca} em função dessas ponderações teremos:
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[scale=1.0]{figuras/Schema.png}
+\includegraphics[scale=0.7]{figuras/Schema.png}
 \caption{Desclocamento linear}
 \label{fig_schema}
 \end{figure}
