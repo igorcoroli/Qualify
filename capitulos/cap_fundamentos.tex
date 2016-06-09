@@ -197,13 +197,6 @@ Finalmente, a Equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto
                       
 \section{Computação Paralela}
 
-O processamento de imagens no formato digital tem como um dos seus principais objetivos a melhora dos seus aspectos visuais e, geralmente, demandam grande processamento por parte dos computadores. Inicialmente esse processamento era feito através de um único núcleo (ou \textit{core}) e utilizavam-se do tipo de programação sequencial, porém, com o a expansão da computação paralela houve um ganho substancial de processamento passando a ser executado de forma mais rápida. Segundo Culler \cite{culler1999parallel}, a computação paralela  é uma coleção de elementos de processamento que cooperam para resolver grandes problemas rapidamente.
+Com a crescente exigência de um maior poder de processamento computacional e o limite físico imposto a velocidade dos processadores (\textit{clock}) surgiu a ideia de dividir a carga de processamento em vários núcleos (ou \textit{cores}). A ideia central da computação paralela é de que um tarefa geralmente pode ser dividida em partes menores e executadas de forma concorrente, ganhando assim tempo de processamento \cite{culler1999parallel}. Assim temos a chamada de \textit{computação de alto desempenho} - HPC (do inglês, \textit{High Performance Computing}) se propõe a otimizar esse processamento diminuindo o tempo de execução das tarefas em geral.
 
-Nesse contexto, \cite{diaz2012survey} afirma que a computação paralela pode aumentar o desempenho das aplicações executando-os em vários processadores, porém, as aplicações que utilizam desses recursos (em sua maioria) não fazem uso de todos esses processadores, subutilizando alguns muitas vezes. Podemos destacar duas formas de paralelismo: Implícito e Explícito. Diz-se que há paralelismo implícito quando cabe ao compilador e ao próprio sistema de execução detectar um potencial ponto de paralelismo bem como controlar e sincronizar sua execução. De modo que o paralelismo explícito é quando cabe ao programador atribuir uma execução paralela bem como controlar e executá-la de forma a garantir sua sincronização.
-
-Segundo \cite{gao2015study}, o aumento do número de processadores não traduz de forma proporcional o ganho de performance. No passado existia pouco paralelismo a ser  explorado por um processador \textit{multi-core} nas aplicações, e muitos núcleos ficam ociosos durante a execução. Especificamente para as aplicações \textit{mobiles} utiliza-se menos de 2 núcleos em média \cite{gao2015study}. {\color{red} Dúvida: Como citar duas vezes a mesma fonte no mesmo parágrafo? Eu acho estranho ficar repetindo.}
-
-Nesse trabalho propomos a exploração de recursos de computação paralela aplicada ao IPD-BPCA, de forma a verificar a sua vantagem mediante a paralelização...
- 
-
-
+O paralelismo, no entanto, adicionou novas complexidade ao sistema antigo (sequencial), como a distribuição eficiente pelos vários processadores e a sincronização de tarefas. O modelo ideal seria o qual todos os processadores trabalhariam de forma iguais sem sobrecarga (\textit{overhead}) de nenhum. O problema de si
