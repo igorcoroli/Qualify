@@ -199,4 +199,78 @@ Finalmente, a Equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto
 
 Com a crescente exigência de um maior poder de processamento computacional e o limite físico imposto a velocidade dos processadores (\textit{clock}) surgiu a ideia de dividir a carga de processamento em vários núcleos (ou \textit{cores}). A ideia central da computação paralela é de que um tarefa geralmente pode ser dividida em partes menores e executadas de forma concorrente, ganhando assim tempo de processamento \cite{culler1999parallel}. Assim temos a chamada de \textit{computação de alto desempenho} - HPC (do inglês, \textit{High Performance Computing}) se propõe a otimizar esse processamento diminuindo o tempo de execução das tarefas em geral.
 
-O paralelismo, no entanto, adicionou novas complexidade ao sistema antigo (sequencial), como a distribuição eficiente pelos vários processadores e a sincronização de tarefas. O modelo ideal seria o qual todos os processadores trabalhariam de forma iguais sem sobrecarga (\textit{overhead}) de nenhum. O problema de si
+O paralelismo, no entanto, adicionou novas complexidade ao sistema sequencial, como a distribuição eficiente de processamento pelos vários processadores e a sincronização de tarefas. A diferença entre processamento sequencial e paralelo pode ser visto na Figura \ref{fig:TiposProc}, nela é intuitivo perceber que para uma mesma tarefa o processamento paralelo \ref{fig:P_Paralelo} irá gastar menos tempo na sua execução quando compararmos com o processamento sequencial \ref{fig:P_Sequencial}.
+
+\begin{figure}[h]
+\subfigure[Processamento sequencial]{
+\includegraphics[width=7.15cm,height=2cm]{figuras/PP_Seq.png}
+\label{fig:P_Sequencial}
+}
+\subfigure[Processamento Paralelo]{
+\includegraphics[width=7.15cm,height=2cm]{figuras/PP_P.png}
+\label{fig:P_Paralelo}}
+\caption{Diferença entre processamento sequencial e processamento paralelo.}
+\label{fig:TiposProc}
+\end{figure}
+
+Michael Flynn \cite{flynn1996parallel} classifica os sistemas paralelos com base no fluxo de dados e de instruções. Segundo Flynn, a arquitetura computacional poder ser encarada como uma relação entre o fluxo de dados e de instruções, sendo que o fluxo de instruções é executado pelo processador sobre um fluxo de dados aos quais essas instruções estão relacionadas. Com base na unicidade e multiplicidade dos fluxos de dados e das instruções, as arquiteturas de computadores são divididas em 4 classes:
+
+\begin{itemize}
+\item \textbf{SISD (\textit{Single Instruction Single Data} - Fluxo único de instruções Fluxo único de dados)}: Consiste na computação predominante há algum tempo, onde as instruções são executadas sequencialmente sobre um conjunto de dados. Também é conhecido como computador serial;
+
+\item \textbf{SIMD (\textit{Single Instruction Multiple Data} - Fluxo único de instruções Fluxo múltiplo de dados)}: Nesse modelo temos vários processadores executando simultaneamente as mesmas instruções em diversos conjuntos de dados sob o controle de uma única unidade de controle mestre.
+
+\item \textbf{MISD (\textit{Multiple Instruction Single Data} - Fluxo múltiplo de instruções Fluxo único de dados)}: Nessa arquitetura temos múltiplos processadores que executam diferentes instruções sobre um único conjunto de dados.
+
+\item \textbf{MIMD (\textit{Multiple Instruction Multiple Data} - Fluxo múltiplo de instruções Fluxo múltiplo de dados)}: Aqui temos múltiplos processadores executando diferentes instruções em diferentes conjuntos de dados independentemente. Essa é a arquitetura mais usada pelos  atuais computadores.
+
+\end{itemize}
+
+\begin{figure}[h]
+\subfigure[Arquitetura SISD]{
+\includegraphics[scale=0.75]{figuras/Flynn_SISD.png}
+\label{fig:Flynn_SISD}
+}
+\subfigure[Arquitetura SIMD]{
+\includegraphics[scale=0.75]{figuras/Flynn_SIMD.png}
+\label{fig:Flynn_SIMD}
+}
+\subfigure[Arquitetura MISD]{
+\includegraphics[scale=0.7]{figuras/Flynn_MISD.png}
+\label{fig:Flynn_SISD}
+}
+\subfigure[Arquitetura MIMD]{
+\includegraphics[scale=0.7]{figuras/Flynn_MIMD.png}
+\label{fig:Flynn_SIMD}
+}
+\caption{Arquiteturas de Flynn}
+\label{fig:TiposProc}
+
+\end{figure}
+Onde:
+\textbf{FI}: Fluxo de Instruções; \textbf{UC}: Unidade de Controle; \textbf{FD}: Fluxo de dados; \textbf{M}: Memória; \textbf{UP}: Unidade de Processamento.
+
+A arquitetura MIMD também pode ser divida de acordo com o tipo de acesso a memória:
+
+\begin{itemize}
+
+\item \textbf{Memória compartilhada ou \textit{Uniform Memory Access Multiprocessor} - UMA}: Nesse modelo as tarefas compartilham de um mesmo espaço de memória e a comunicação é mais simples, pois utiliza-se de uma área comum na memória (Figura \ref{fig:Mem_Compartilhada}). Todos os processadores podem acessar toda a memória, também são chamados de multiprocessadores, existe apenas um espaço de endereçamento que é usado de forma implícita para a comunicação entre os processadores;
+
+\item \textbf{Memória distribuída ou \textit{Nonuniform Memory Access Multiprocessor} - NUMA}: Nesse padrão cada processador possui o seu próprio endereço na memória (Figura \ref{fig:Mem_Ditribuida}). A interligação entre processadores e memória é feita através de uma rede de interconexão. O acesso aos dados remotos é realizado através de troca de mensagens.
+
+\end{itemize}
+
+\begin{figure}[h]
+\subfigure[Memória compartilhada - UMA]{
+\includegraphics[scale=0.75]{figuras/Tipos_Memorias_Shared.PNG}
+\label{fig:Mem_Compartilhada}
+}
+\subfigure[Memória distribuída - NUMA]{
+\includegraphics[scale=0.8]{figuras/Tipos_Memorias.PNG}
+\label{fig:Mem_Ditribuida}}
+\caption{Diferença entre processamento sequencial e processamento paralelo.}
+\label{fig:Mem_Acesso}
+\end{figure}
+
+Podemos destacar dois tipos de paralelismo: implícito e explícito. Diz-se que o paralelismo é implícito quando cabe ao compilador ou ao sistema paralelizar a aplicação. O paralelismo é dito explícito quando cabe ao programador indicar os pontos que serão processados de forma paralela.
+
