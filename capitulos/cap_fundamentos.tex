@@ -99,18 +99,16 @@ A condição de existência do classificador projetado é que o primeiro termo da eq
               
 \section{Detector por Produto Interno utilizando Análise de Componentes Principais (IPD-B-PCA)}
 
-O Detector por Produto Interno (do inglês, \textit{Inner Product Detector} - IPD) nada mais é que um classificador construído a partir de um treinamento de imagens previamente selecionadas. Esses classificadores são considerados rápidos por realizarem a classificação através de uma operação simples de produto interno, além de minimizarem o erro quadrático \cite{waldir}. Com o intuito de aumentar sua robustez a pequenas rotações, Sabino  \cite{waldir} acrescentou a técnica de Análise de Componentes Principais (do inglês, Principal Component Analysis - PCA).
+Com o intuito de aumentar a robustez do detector por produto interno (IPD) a pequenas rotações, utilizou-se a técnica de análise de componentes principais (do inglês, \textit{Principal Component Analysis} - PCA) \cite{waldir}. A principal motivação para a aplicação dessa técnica reside no fato de que os padrões analisados não são distribuídos de forma aleatória, e mesmo essas estando distribuídas em um espaço de alta dimensão, assim, podem ser representadas por um subespaço de menor dimensão. O conjunto dessas componentes principais são denominadas \textit{eigenfaces} (o termo \textit{eigenfaces} deve-se ao fato da representação das faces através dos autovetores do conjunto de faces).
 
-Segundo Sabino \cite{waldir}, a principal motivação para a aplicação da técnica de PCA reside no fato de que os padrões analisados (faces, por exemplo) não são distribuídos de forma aleatória, e mesmo essas estando distribuídas em um espaço de dimensão elevada podem ser representadas por um subespaço de menor dimensão. O conjunto dessas componentes principais são denominadas \textit{eigenfaces} (o termo \textit{eigenfaces} deve-se ao fato da representação das faces através dos autovetores do conjunto de faces).
+\subsection*{\textit{Eigenpoints}}
 
-\subsection*{\textit{Eigenfaces} e \textit{Eigenpoints}}
+O termo \textit{eigenpoints} refere-se a um método que faz uso do padrão comum existente nas faces para representá-los em um subespaço de dimensão inferior ou igual ao original, assim, podemos utilizar \textit{eigenpoints} para encontrarmos os pontos fiduciais\footnote{características salientes comum as faces, como canto da boca, olho, nariz, etc.} (do inglês, \textit{fiducial point}) de um conjunto de faces, por exemplo. \textit{Eigenpoints} constitui-se um caso específico de \textit{eigenfaces}, porém, ao invés de utilizarmos faces utilizamos somente blocos da região de interesse (ponto fiducial desejado), conforme pode ser visto na Figura \ref{fig:eigenfacesEx} e \ref{fig:eigenpointsEx}. Ao combinarmos essa técnica ao classificador IPD temos como resultado um sistema mais robusto a pequenas rotações \cite{waldir}.
 
-O termo \textit{eigenfaces} refere-se a um algoritmo que faz uso do padrão comum existente nas faces para representá-los em um subespaço de dimensão inferior ao original, ou seja, a partir de diversas faces com pequenas inclinações podemos gerar um único "template"\ que corresponde a representação de todos. Quando aliamos essa técnica ao IPD conseguimos um classificador mais robusto a pequenas rotações.
-
-Matematicamente podemos obter as \textit{eigenfaces} como sendo \textit{M} realizações de uma variável aleatória $\mathcal{X}_{Nx1}$ iguais a $x_{\textit{i}}$. Cada coluna $x_{\textit{i}}$ contém os \textit{pixels} de uma imagem da face ${\gamma_\textit{i}}$, onde \textit{i} = \{1,..., M\}. Dessa forma, \textbf{X} é uma matriz formada por \textit{M} vetores (sendo \textit{M} > \textit{N}) da seguinte forma:
+Matematicamente podemos obter os \textit{eigenpoints} como sendo \textit{M} realizações de uma variável aleatória $\mathcal{X}_{Nx1}$ iguais a $x_{\textit{i}}$. Cada coluna $x_{\textit{i}}$ contém os \textit{pixels} de blocos centrados em pontos fiduciais ${\gamma_\textit{i}}$, onde \textit{i} = \{1,..., M\}. Dessa forma, \textbf{X} é uma matriz formada por \textit{M} vetores (sendo \textit{M} > \textit{N}) da seguinte forma:
 
 \begin{equation}
-X = [{x_1} - {\mu _\mathcal{X}},\,...,\,{x_M} - {\mu _\mathcal{X}}]
+\textbf{X} = [{x_1} - {\mu _\mathcal{X}},\,...,\,{x_M} - {\mu _\mathcal{X}}]
 \end{equation}
 
 Onde $\mu _\mathcal{X}$ é:
@@ -119,21 +117,19 @@ Onde $\mu _\mathcal{X}$ é:
 {\mu _\mathcal{X}} = \frac{1}{M}\sum\limits_{i = 1}^M {{x_\textit{i}}}
 \end{equation}
 
-A matriz de covariância de $\mathcal{X}$, $\sum\nolimits_\mathcal{X}$ é dada por:
+Seja \textbf{$\mathbf{\Sigma}_\mathcal{X}$} a matriz de covariância de $\mathcal{X}$, dada por:
 
 \begin{equation}
-\sum\nolimits_\mathcal{X}  =  \frac{1}{{M - 1}}X{X^T}
+\mathbf{\Sigma}_\mathcal{X}  =  \frac{1}{{M - 1}}\textbf{X}{\textbf{X}^T}
 \end{equation}
 
-Dessa forma, a base que contém as \textit{N} componentes principais descorrelacionadas (\textit{eingenfaces}) é encontrada através da diagonalização da matriz $\sum\nolimits_\mathcal{X}$, assim:
+Dessa forma, a base que contém as \textit{N} componentes principais descorrelacionadas (\textit{eingenpoints}) é encontrada através da diagonalização da matriz $\mathbf{\Sigma}_\mathcal{X}$, assim:
 
 \begin{equation}
-\Lambda  = {\Phi ^T}\sum\nolimits_\mathcal{X} \Phi
+\mathbf{\Lambda} = \mathbf{\Phi}^{*t} \mathbf{\Sigma}_{\mathcal{X}} \mathbf{\Phi}.
 \end{equation}
 
-onde $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetores de $\sum\nolimits_\mathcal{X}$, o sobrescrito \textit{T} indica o transposto da matriz de covariância e $\Lambda$ é a matriz diagonal contendo os valores de $\sum\nolimits_\mathcal{X}$, onde cada autovalor ${\lambda _\textit{i}}$ tem uma variância maior ou igual ao seu sucessor, ou seja, ${\lambda _1} \ge {\lambda _2} \ge ... \ge {\lambda _N}$. Dessa forma é possível selecionar os "melhores"\ componentes através dos autovalores ${\lambda _i}$. Assim, podemos dizer que o método PCA e os \textit{eingenfaces} são as \textit{k} componentes principais de $\Phi_{\textit{i}}$.
-
-Nesse contexto podemos utilizar esse raciocínio para ao invés de faces tratar características salientes comum as faces (canto da boca, olho, nariz, etc), a esses atributos damos o nome de pontos fiduciais (do inglês, \textit{fiducial point}). Quando aplicamos a teoria de \textit{eigenfaces} aos pontos fiduciais obteremos os \textit{eigenpoints}. O procedimento matemático para obtermos os \textit{eigenpoints} é o mesmo dos \textit{eigenfaces}, bastando somente delimitar os \textit{pixels} em blocos centrados no ponto fiducial de interesse. As Figuras \ref{fig:eigenfacesEx} e \ref{fig:eigenpointsEx} ilustram os dois métodos.
+onde $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetores de $\mathbf{\Sigma}_\mathcal{X}$, o sobrescrito \textit{T} indica o transposto da matriz de covariância e $\Lambda$ é a matriz diagonal contendo os valores de $\sum\nolimits_\mathcal{X}$, onde cada autovalor ${\lambda _\textit{i}}$ tem uma variância maior ou igual ao seu sucessor, ou seja, ${\lambda _1} \ge {\lambda _2} \ge ... \ge {\lambda _N}$. Dessa forma, é possível selecionar os componentes de maior energia através dos autovalores ${\lambda _i}$. Assim, podemos dizer que o método PCA e os \textit{eingenfaces} são as \textit{k} componentes principais de $\Phi_{\textit{i}}$.
 
 \begin{figure}[h]
 \subfigure[Exemplos de \textit{eigenfaces}]{
@@ -148,14 +144,14 @@ Nesse contexto podemos utilizar esse raciocínio para ao invés de faces tratar ca
 
 \subsection*{Formulação do IPD-B-PCA}
 
-O método proposto por Sabino \cite{waldir} consiste em aumentar a robustez dos filtros discriminativos através das componentes principais de maior energia, ou seja, cujos autovalores associados são maiores. Matematicamente podemos obter esses filtros da seguinte maneira: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${\mathcal{A}_1},\,{\mathcal{A}_2},\,...,\,{\mathcal{A}_N}$\} onde: 
+O método utilizado consiste em aumentar a robustez dos filtros discriminativos através das componentes principais de maior energia, ou seja, cujos autovalores associados são maiores \cite{waldir}. Matematicamente podemos obter esses filtros da seguinte maneira: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${\mathcal{A}_1},\,{\mathcal{A}_2},\,...,\,{\mathcal{A}_N}$\} onde: 
 
 \begin{itemize}
 \item A classe ${\mathcal{A}_1}$ será composta pela componente que desejamos detectar (${\mathcal{A}_1=\{\phi _i\}}$);
 
 \item A classe ${\mathcal{A}_2}$ refere-se a deslocamentos lineares de $\phi _i$. A expressão $\phi _i^{n,m}$ relaciona o deslocamento linear da componente \textit{i} em \textit{n} \textit{pixels} na direção horizontal e \textit{m} na vertical. Considerando-se blocos quadrados de tamanho \textit{L} em que o centro do bloco contém o ponto fiducial de interesse, podemos escrever ${\mathcal{A}_2} = \{ \phi _i^{n,m}$, onde: $- L \le \,m,n\, \le \,L$, com $n,m \ne \,0\}$ .
 
-\item A classe $\mathcal{B}$ será composta pelas demais componentes $\phi _j$, ou seja, as classes \{ ${\mathcal{A}_3},\,{\mathcal{A}_4},\,...,\,{\mathcal{A}_N}$\}.
+\item A classe $\mathcal{B}$ será composta pelas demais componentes $\phi _j$, ou seja, as classes \newline\{${\mathcal{A}_3},\,{\mathcal{A}_4},\,...,\,{\mathcal{A}_N}$\}.
 \end{itemize}
 
 Para projetarmos o nosso classificador utilizaremos a equação \eqref{vetorH_final}, levando-se em consideração as premissas citadas teremos:
@@ -164,7 +160,7 @@ Para projetarmos o nosso classificador utilizaremos a equação \eqref{vetorH_fina
 {h_{{\phi _1}}} = {\left\{ {{p_1}{R_{A1}} + {p_2}{R_{A2}} + {p_B}{R_B}} \right\}^{ - 1}}\,{p_1}{R_{A1}}
 \end{equation}
 
-A Figura \ref{fig_ipd_pca} ilustra o esquema proposto, onde temos \textit{S} \textit{eigenpoints} ($\Phi  = \,{\phi _1},\,{\phi _2},\,...,\,{\phi _S}$), para cada um será projetado um filtro, de forma que estejam disposto do maior para o menor valor de variância (autovalores), desse modo, ${\lambda _1} > \,{\lambda _2} > ,...,\,{\lambda _S}$.
+A Figura \ref{fig_ipd_pca} ilustra o esquema proposto, onde temos \textit{S} \textit{eigenpoints} ($\Phi  = \,{\phi _1},\,{\phi _2},\,...,\,{\phi _S}$), para cada um será projetado um filtro, de forma que estejam dispostos do maior para o menor valor de variância (autovalores), desse modo, ${\lambda _1} \ge \,{\lambda _2} \ge ,...,\,{\lambda _S}$.
 
 \begin{figure}[!htb]
 \centering
@@ -173,7 +169,7 @@ A Figura \ref{fig_ipd_pca} ilustra o esquema proposto, onde temos \textit{S} \te
 \label{fig_ipd_pca}
 \end{figure}
 
-Na Figura \ref{fig_schema}, podemos observar um \textit{eigenpoint} que refere-se ao olho direito considerando-se apenas a primeira componente principal. A componente $\phi_1$ foi calculada através de blocos de dimensão 2L+1 (imagem mais à esquerda). Afim de obtermos a componente $\phi_2$ através de deslocamentos lineares até o meio do bloco calculamos $\mathop {{\phi _i}}\limits^ \sim$ para blocos de dimensão 4L+1 (imagem mais a direita). Assim, reescrevendo a Equação \eqref{eq_ipd_pca} em função dessas ponderações teremos:
+Na Figura \ref{fig_schema}, podemos observar um \textit{eigenpoint} que refere-se ao olho direito considerando-se apenas a primeira componente principal. A componente $\phi_1$ foi calculada através de blocos de dimensão $2L+1$ (imagem à esquerda). Afim de obtermos a componente $\phi_2$ através de deslocamentos lineares de meio bloco calculamos $\mathop {{\phi _i}}\limits^ \sim$ para blocos de dimensão $4L+1$ (imagem à direita). Assim, reescrevendo a equação \eqref{eq_ipd_pca} em função dessas ponderações teremos:
 
 \begin{figure}[!htb]
 \centering
@@ -193,7 +189,7 @@ j \ne i\hfill}^N {{\phi _j}{{({\phi _j})}^{T}}}
 \end{array} \right\}^{ - 1}}\,{p_1}{\phi _i}
 \end{equation}
 
-Finalmente, a Equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto interno utilizando análise de componentes principais. É interessante destacarmos que na construção dos padrões de interesse da classe $\mathcal{A}_1$ podemos utilizar componentes levemente rotacionados ou deslocados, dessa forma é possível construir detectores mais robustos. A classe ${\mathcal{A}_2}$ é de fundamental importância, uma vez que se considerássemos somente as classes padrões ($\mathcal{A}_1$) poderíamos incorrer em um possível erro e detectar algo próximo ao padrão mesmo não sendo. Esse fato, deve-se a linearidade dos filtros, portanto, pequenas alterações na entrada produzem apenas pequenas perturbações na saída. Assim, a adição da classe ${\mathcal{A}_2}$ permite ao classificador rejeitar pequenos deslocamentos lineares de forma mais precisa e com uma maior eficiência.
+Finalmente, a equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto interno utilizando análise de componentes principais. Salienta-se que na construção dos padrões de interesse da classe $\mathcal{A}_1$ podemos utilizar componentes levemente rotacionados ou deslocados, dessa forma é possível construir detectores mais robustos. A classe ${\mathcal{A}_2}$ é de fundamental importância, uma vez que se considerássemos somente as classes dos padrões de interesse poderíamos discriminar um falso positivo, ou seja, a classe $\mathcal{A}_1$ deslocada. Esse fato, deve-se a linearidade dos filtros, portanto, pequenas alterações na entrada produzem apenas pequenas perturbações na saída. Assim, a adição da classe ${\mathcal{A}_2}$ permite ao classificador rejeitar pequenos deslocamentos lineares de forma mais precisa e com uma maior eficiência.
                       
 \section{Computação Paralela}
 
@@ -272,5 +268,11 @@ A arquitetura MIMD também pode ser divida de acordo com o tipo de acesso a memór
 \label{fig:Mem_Acesso}
 \end{figure}
 
-Podemos destacar dois tipos de paralelismo: implícito e explícito. Diz-se que o paralelismo é implícito quando cabe ao compilador ou ao sistema paralelizar a aplicação. O paralelismo é dito explícito quando cabe ao programador indicar os pontos que serão processados de forma paralela.
+Podemos destacar dois tipos de paralelismo: implícito e explícito. Diz-se que o paralelismo é implícito quando cabe ao compilador ou ao sistema paralelizar a aplicação. O paralelismo é dito explícito quando cabe ao programador indicar os pontos que serão processados de forma paralela. 
+
+O desempenho de um algoritmo sequencial geralmente é avaliado pelo seu tempo de execução, já o tempo de execução de um algoritmo paralelo depende, além do tamanho de entrada de dados, de fatores como o número de processadores e a arquitetura do computador. Culler \cite{culler1999parallel} afirma que o desempenho de um sistema paralelo é a combinação do algoritmo e a arquitetura na qual ela foi implementada . Algumas métricas são comumente utilizadas, são elas, o tempo de execução, fator de aceleração (ou \textit{speedup}), eficiência e o custo.
+
+\chapter{Fundamentos Específicos}\label{cap-especifico}
+
+\section{Contextualização do Problema} \label{sec_IPD}
 
