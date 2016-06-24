@@ -99,30 +99,30 @@ A condição de existência do classificador projetado é que o primeiro termo da eq
               
 \section{Detector por Produto Interno utilizando Análise de Componentes Principais}
 
-Com o intuito de aumentar a robustez do detector por produto interno (IPD) a pequenas rotações, utilizou-se a técnica de análise de componentes principais (do inglês, \textit{principal component analysis} - PCA) \cite{waldir}. A técnica do PCA é utilizada, entre outras coisas, no problema de redução de dimensionalidade. Essa técnica baseia-se na extração de um número desejado de componentes principais de um vetor multidimensional, de modo que ao final da operação tenhamos um vetor cuja dimensão é inferior à original e sua variância seja maximizada \cite{waldir}.
+Com o intuito de aumentar a robustez do detector por produto interno (IPD) a pequenas rotações, utilizou-se a técnica de análise de componentes principais (do inglês, \textit{principal component analysis} - PCA) \cite{waldir}. Essa técnica baseia-se na extração de um número desejado de componentes principais de um vetor multidimensional, de modo que ao final da operação tenhamos um vetor cuja dimensão é inferior à original e sua variância seja maximizada \cite{waldir}. A seguir comentaremos ...
 
 \subsection*{\textit{Eigenpoints}}
 
-O termo \textit{eigenpoints} refere-se a um método que faz uso de PCA para a detecção de pontos fiduciais\footnote{Características salientes comum as faces, como canto da boca, olho, nariz, etc.} (do inglês, \textit{fiducial point}) em imagens. Tendo em vista a similaridade dos pontos fiduciais humanos bem como a localização destes, utiliza-se essa técnica na redução de dimensionalidade tendo em vista que as
+O termo \textit{eigenpoints} refere-se a um método que faz uso de PCA para a detecção de pontos fiduciais\footnote{Características salientes comum as faces, como canto da boca, olho, nariz, etc.} (do inglês, \textit{fiducial point}) em imagens. A análise de componentes principais, é associada à ideia de redução de dimensionalidade,  com  menor  perda  possível  da  informação. Tendo em vista a similaridade dos pontos fiduciais humanos bem como a localização destes, utiliza-se essa técnica para representá-los em um subespaço de dimensão inferior ou igual ao original, assim, podemos utilizar \textit{eigenpoints} para encontrarmos os pontos fiduciais de um conjunto de faces, por exemplo.
 
-para representá-los em um subespaço de dimensão inferior ou igual ao original, assim, podemos utilizar \textit{eigenpoints} para encontrarmos os pontos fiduciais (do inglês, \textit{fiducial point}) de um conjunto de faces, por exemplo. \textit{Eigenpoints} constitui-se um caso específico de \textit{eigenfaces}, porém, ao invés de utilizarmos faces utilizamos somente blocos da região de interesse (ponto fiducial desejado), conforme pode ser visto na Figura \ref{fig:eigenfacesEx} e \ref{fig:eigenpointsEx}. Ao combinarmos essa técnica ao classificador IPD temos como resultado um sistema mais robusto a pequenas rotações \cite{waldir}.
+ \textit{Eigenpoints} constitui-se um caso específico de \textit{eigenfaces} (Figura \ref{fig:eigenfacesEx}), porém, ao invés de utilizarmos toda a face tomamos um ponto fiducial de interesse e recortamos o bloco em que ele está contido, conforme pode ser visto na Figura \ref{fig:eigenpointsEx} (na Figura \ref{fig:eigenfacesEx} temos o \textit{eigenface} e na Figura \ref{fig:eigenpointsEx} recortamos o bloco no qual está contido o olho direito - \textit{eigenpoint}).
 
-Matematicamente podemos obter os \textit{eigenpoints} como sendo \textit{M} realizações de uma variável aleatória $\mathcal{X}_{Nx1}$ iguais a $x_{\textit{i}}$. Cada coluna $x_{\textit{i}}$ contém os \textit{pixels} de blocos centrados em pontos fiduciais ${\gamma_\textit{i}}$, onde \textit{i} = \{1,..., M\}. Dessa forma, \textbf{X} é uma matriz formada por \textit{M} vetores (sendo \textit{M} > \textit{N}) da seguinte forma:
+Matematicamente, podemos obter os \textit{eigenpoints} como sendo $M$ realizações de uma variável aleatória $\mathcal{X}_{N \times1}$ iguais a x$_{\textit{i}}$. Cada coluna x$_{\textit{i}}$ contém os \textit{pixels} de blocos centrados em pontos fiduciais ${\gamma_\textit{i}}$, onde \textit{i} = \{1,..., M\}. Dessa forma, \textbf{X} é uma matriz formada por \textit{M} vetores (sendo \textit{M} > \textit{N}) da seguinte forma:
 
 \begin{equation}
-\textbf{X} = [{x_1} - {\mu _\mathcal{X}},\,...,\,{x_M} - {\mu _\mathcal{X}}]
+\textbf{X} = [{\rm{x}_1} - {\mu _\mathcal{X}},\,...,\,{\rm{x}_M} - {\mu _\mathcal{X}}]
 \end{equation}
 
-Onde $\mu _\mathcal{X}$ é:
+onde $\mu _\mathcal{X}$ é:
 
 \begin{equation}
-{\mu _\mathcal{X}} = \frac{1}{M}\sum\limits_{i = 1}^M {{x_\textit{i}}}
+{\mu _\mathcal{X}} = \frac{1}{M}\sum\limits_{i = 1}^M {{\rm{x}_\textit{i}}}
 \end{equation}
 
 Seja \textbf{$\mathbf{\Sigma}_\mathcal{X}$} a matriz de covariância de $\mathcal{X}$, dada por:
 
 \begin{equation}
-\mathbf{\Sigma}_\mathcal{X}  =  \frac{1}{{M - 1}}\textbf{X}{\textbf{X}^T}
+\mathbf{\Sigma}_\mathcal{X}  =  \frac{1}{{M - 1}}\textbf{X}{\textbf{X}^{*T}}
 \end{equation}
 
 Dessa forma, a base que contém as \textit{N} componentes principais descorrelacionadas (\textit{eingenpoints}) é encontrada através da diagonalização da matriz $\mathbf{\Sigma}_\mathcal{X}$, assim:
@@ -131,7 +131,7 @@ Dessa forma, a base que contém as \textit{N} componentes principais descorrelaci
 \mathbf{\Lambda} = \mathbf{\Phi}^{*t} \mathbf{\Sigma}_{\mathcal{X}} \mathbf{\Phi}.
 \end{equation}
 
-onde $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetores de $\mathbf{\Sigma}_\mathcal{X}$, o sobrescrito \textit{T} indica o transposto da matriz de covariância e $\Lambda$ é a matriz diagonal contendo os valores de $\sum\nolimits_\mathcal{X}$, onde cada autovalor ${\lambda _\textit{i}}$ tem uma variância maior ou igual ao seu sucessor, ou seja, ${\lambda _1} \ge {\lambda _2} \ge ... \ge {\lambda _N}$. Dessa forma, é possível selecionar os componentes de maior energia através dos autovalores ${\lambda _i}$. Assim, podemos dizer que o método PCA e os \textit{eingenfaces} são as \textit{k} componentes principais de $\Phi_{\textit{i}}$.
+sendo $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetores de $\mathbf{\Sigma}_\mathcal{X}$, o sobrescrito \textit{T} indica o transposto da matriz de covariância e $\Lambda$ é a matriz diagonal contendo os valores de $\sum\nolimits_\mathcal{X}$, onde cada autovalor ${\lambda _\textit{i}}$ tem uma variância maior ou igual ao seu sucessor, ou seja, ${\lambda _1} \ge {\lambda _2} \ge ... \ge {\lambda _N}$. Dessa forma, é possível selecionar os componentes de maior energia através dos autovalores ${\lambda _i}$.
 
 \begin{figure}[h]
 \subfigure[Exemplos de \textit{eigenfaces}]{
@@ -146,7 +146,7 @@ onde $\Phi  = [{\phi _1},\,{\phi _2},\,...,\,{\phi _N}]$ é a matriz de autovetor
 
 \subsection*{Formulação do IPD-B-PCA}
 
-O método utilizado consiste em aumentar a robustez dos filtros discriminativos através das componentes principais de maior energia, ou seja, cujos autovalores associados são maiores \cite{waldir}. Matematicamente podemos obter esses filtros da seguinte maneira: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${\mathcal{A}_1},\,{\mathcal{A}_2},\,...,\,{\mathcal{A}_N}$\} onde: 
+O método utilizado consiste em aumentar a robustez do classificador IPD através das componentes principais de maior energia, ou seja, cujos autovalores associados são maiores \cite{waldir}. Matematicamente podemos obter esses filtros da seguinte maneira: suponhamos uma  variável aleatória que pode ser classificadas nas classes \{${\mathcal{A}_1},\,{\mathcal{A}_2},\,...,\,{\mathcal{A}_N}$\} onde: 
 
 \begin{itemize}
 \item A classe ${\mathcal{A}_1}$ será composta pela componente que desejamos detectar (${\mathcal{A}_1=\{\phi _i\}}$);
@@ -195,11 +195,7 @@ Finalmente, a equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto
                       
 \section{Computação Paralela}
 
-A ideia central da computação paralela é de que um tarefa geralmente pode ser dividida em partes menores e executadas de forma concorrente, ganhando assim tempo de processamento \cite{culler1999parallel}. Assim temos a chamada de \textit{computação de alto desempenho} (do inglês, \textit{High Performance Computing}, HPC) se propõe a otimizar esse processamento diminuindo o tempo de execução das tarefas em geral. Quando cabe ao programador indicar quais os trechos que serão paralelizáveis dizemos que há uma \textit{paralelismo explícito}, quando é o próprio sistema que paraleliza as ações dizemos que há um paralelismo implícito.
-
-Atualmente existem duas abordagens no que tange a computação paralela, a primeira diz respeito aos \textit{multi-cores}, integra alguns núcleos (entre dois e dez) em um único microprocessador, como exemplo temos \textit{desktops}, \textit{laptops}, etc. A segunda relaciona-se aos \textit{many-cores} e faz uso de um grande número de núcleos (geralmente várias centenas) e está especialmente orientada à execução de programas paralelos, como exemplo podemos citar as GPUs (\textit{Graphics Processing Unit}) \cite{diaz2012survey}.
-
-Há dois principais modelos de arquitetura paralela, os que fazem uso de memória compartilhada e os que fazem uso de memória distribuída . Os modelos de memória compartilhada utilizam um único espaço de endereçamento de memória que pode ser acessada por todos os processadores em contrapartida os modelos com memória distribuída  não há um espaço de endereçamento global, ou seja, cada processador possui sua própria memória. No que tange a programação existem alguns modelos, porém suas abordagens tornaram-se predominante na HPC, o OpenMP (do inglês, \textit{Open Multi-Processing}) para memória compartilhada e MPI (do inglês, \textit{Message Passing Interface}) para memória distribuída. Isso nos permite definir os modelos paralelos clássicos ou puros \cite{diaz2012survey}. Salienta-se também que com a evolução das CPUs e GPUs hoje existem modelos híbridos.
+A ideia central da computação paralela é de que um tarefa geralmente pode ser dividida em partes menores e executadas de forma concorrente. Atualmente existem duas abordagens no que tange a computação paralela, a primeira diz respeito aos \textit{multi-cores}, integra alguns núcleos (entre dois e dez) em um único microprocessador, como exemplo temos \textit{desktops}, \textit{celulares}, etc. A segunda relaciona-se aos \textit{many-cores} e faz uso de um grande número de núcleos (geralmente várias centenas) e está especialmente orientada à execução de programas paralelos, como exemplo podemos citar as GPUs (\textit{Graphics Processing Unit}) \cite{diaz2012survey}.
 
 O OpenMP é uma API\footnote{do inglês \textit{Application Programming Interface} é um conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.} aplicado a arquiteturas de programação paralela de memória compartilhada, ela é orientada para a tarefa e trabalha em um nível de abstração mais elevado do que as \textit{threads}. Essa API é portável entre arquiteturas de memória compartilhada, e a transição dos trechos sequenciais-paralelos se dão através da estrutura \textit{fork/join}. O elevado nível de abstração e a facilidade da API tornam o OpenMP adequado para o desenvolvimento de aplicações de HPC em sistemas de memória compartilhada \cite{diaz2012survey}.
 
