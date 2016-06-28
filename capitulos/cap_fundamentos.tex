@@ -97,13 +97,13 @@ Considerando-se a matriz de autocorrelação de $B$ igual a $R_B$ e a matriz $A_i$
 
 A condição de existência do classificador projetado é que o primeiro termo da equação \eqref{vetorH_final} seja uma matriz inversível e a dimensão dos vetores de entrada deve ser menor que a soma dos números de elementos de todas as classes $A_j$ e B, ou seja $d \le \,r\, + \,\sum\limits_{j = 1}^n {{L_j}}$.
               
-\section{Detector por Produto Interno utilizando Análise de Componentes Principais}
+\section{Detector por Produto Interno utilizando Análise de Componentes Principais}\label{cap-IPD-PCA}
 
-Com o intuito de aumentar a robustez do detector por produto interno (IPD) a pequenas rotações, utilizou-se a técnica de análise de componentes principais (do inglês, \textit{principal component analysis} - PCA) \cite{waldir}. Essa técnica baseia-se na extração de um número desejado de componentes principais de um vetor multidimensional, de modo que ao final da operação tenhamos um vetor cuja dimensão é inferior à original e sua variância seja maximizada \cite{waldir}. A seguir comentaremos ...
+Com o intuito de aumentar a robustez do detector por produto interno (IPD) a pequenas rotações, utilizou-se a técnica de análise de componentes principais (do inglês, \textit{principal component analysis} - PCA) \cite{waldir}. Essa técnica baseia-se na extração de um número desejado de componentes principais de um vetor multidimensional, de modo que ao final da operação tenhamos um vetor cuja dimensão é inferior à original e sua variância seja maximizada \cite{waldir}. A seguir comentaremos sobre o método denominado \textit{eigenpoint}, que é utilizado para encontrar pontos fiduciais\footnote{do inglês, \textit{fiducial point}, refere-se a características salientes comum as faces, como canto da boca, olho, nariz, etc.}
 
 \subsection*{\textit{Eigenpoints}}
 
-O termo \textit{eigenpoints} refere-se a um método que faz uso de PCA para a detecção de pontos fiduciais\footnote{Características salientes comum as faces, como canto da boca, olho, nariz, etc.} (do inglês, \textit{fiducial point}) em imagens. A análise de componentes principais, é associada à ideia de redução de dimensionalidade,  com  menor  perda  possível  da  informação. Tendo em vista a similaridade dos pontos fiduciais humanos bem como a localização destes, utiliza-se essa técnica para representá-los em um subespaço de dimensão inferior ou igual ao original, assim, podemos utilizar \textit{eigenpoints} para encontrarmos os pontos fiduciais de um conjunto de faces, por exemplo.
+O termo \textit{eigenpoints} refere-se a um método que faz uso de PCA para a detecção de pontos fiduciais em imagens. A análise de componentes principais, é associada à ideia de redução de dimensionalidade,  com  menor  perda  possível  da  informação. Tendo em vista a similaridade dos pontos fiduciais humanos bem como a localização destes, utiliza-se essa técnica para representá-los em um subespaço de dimensão inferior ou igual ao original, assim, podemos utilizar \textit{eigenpoints} para encontrarmos os pontos fiduciais de um conjunto de faces, por exemplo.
 
  \textit{Eigenpoints} constitui-se um caso específico de \textit{eigenfaces} (Figura \ref{fig:eigenfacesEx}), porém, ao invés de utilizarmos toda a face tomamos um ponto fiducial de interesse e recortamos o bloco em que ele está contido, conforme pode ser visto na Figura \ref{fig:eigenpointsEx} (na Figura \ref{fig:eigenfacesEx} temos o \textit{eigenface} e na Figura \ref{fig:eigenpointsEx} recortamos o bloco no qual está contido o olho direito - \textit{eigenpoint}).
 
@@ -195,11 +195,159 @@ Finalmente, a equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto
                       
 \section{Computação Paralela}
 
-A ideia central da computação paralela é de que um tarefa geralmente pode ser dividida em partes menores e executadas de forma concorrente. Atualmente existem duas abordagens no que tange a computação paralela, a primeira diz respeito aos \textit{multi-cores}, integra alguns núcleos (entre dois e dez) em um único microprocessador, como exemplo temos \textit{desktops}, \textit{celulares}, etc. A segunda relaciona-se aos \textit{many-cores} e faz uso de um grande número de núcleos (geralmente várias centenas) e está especialmente orientada à execução de programas paralelos, como exemplo podemos citar as GPUs (\textit{Graphics Processing Unit}) \cite{diaz2012survey}.
+A ideia central da computação paralela é de que um tarefa geralmente pode ser dividida em partes menores e executadas de forma concorrente. Atualmente existem duas abordagens no que tange a computação paralela, a primeira diz respeito aos \textit{multi-cores}, integra alguns núcleos (entre dois e dez) em um único microprocessador, como exemplo temos \textit{desktops}, \textit{smartphones}, etc. A segunda relaciona-se aos \textit{many-cores} e faz uso de um grande número de núcleos (geralmente várias centenas) e está especialmente orientada à execução de programas paralelos, o principal exemplo desse modelo são as GPUs (\textit{Graphics Processing Unit}) \cite{diaz2012survey}.
 
-O OpenMP é uma API\footnote{do inglês \textit{Application Programming Interface} é um conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.} aplicado a arquiteturas de programação paralela de memória compartilhada, ela é orientada para a tarefa e trabalha em um nível de abstração mais elevado do que as \textit{threads}. Essa API é portável entre arquiteturas de memória compartilhada, e a transição dos trechos sequenciais-paralelos se dão através da estrutura \textit{fork/join}. O elevado nível de abstração e a facilidade da API tornam o OpenMP adequado para o desenvolvimento de aplicações de HPC em sistemas de memória compartilhada \cite{diaz2012survey}.
+No que tange a arquitetura podemos destacar a quantidade de \textit{cores} já quanto a questão de \textit{software} para computação paralela podemos destacar algumas APIs\footnote{do inglês \textit{Application Programming Interface} é um conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.}, as quais são baseadas no tipo de memória utilizada (compartilhada ou distribuída). Destaca-se \textit{POSIX Threads}, \textit{OpenMP} e MPI. A tabela \ref{tab_difPar} comenta as principais diferenças.
+
+O OpenMP é uma API aplicado a arquiteturas de programação paralela de memória compartilhada, ela é orientada para a tarefa e trabalha em um nível de abstração mais elevado do que as \textit{threads}. Essa API é portável entre arquiteturas de memória compartilhada, e a transição dos trechos sequenciais-paralelos se dão através da estrutura \textit{fork/join}. O elevado nível de abstração e a facilidade da API tornam o OpenMP adequado para o desenvolvimento de aplicações de HPC em sistemas de memória compartilhada \cite{diaz2012survey}.
+
+\textit{POSIX Threads} (do inglês, \textit{Portable Operating System Interface}), também conhecido como \textit{Pthreads} é um modelo baseado em memória compartilhada que padroniza o uso de \textit{threads} entre diferentes sistemas operativo/arquiteturas. \textit{Pthreads} são definidas como um conjunto de tipos de dados em C e um conjunto de rotinas.
+
+O MPI (\textit{Message Passing}), é um modelo de programação paralela aplicado a memórias distribuídas que faz uso de troca de mensagens para a comunicação entre processos. No MPI diferentes processos podem executar diferentes programas, por isso também é relacionado como MPMD (\textit{multiple program multiple data}). A principal vantagem do MPI é portabilidade entre diferentes plataformas e a simplificação de tarefas através das rotinas implementadas.
+
+\begin{center}
+\begin{table}[tbh]
+\centering
+\newcolumntype{M}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\renewcommand\arraystretch{1} \setlength\minrowclearance{2.4pt}
+\caption{Modelos de Programação Paralela Puros}
+\vspace{0.5cm}
+\label{tab_difPar}
+\begin{tabular}{|l|M{2cm}|M{3cm}|M{3cm}|}
+\hline
+\textbf{Implementação} & \textbf{Pthreads} & \textbf{OpenMP} & \textbf{MPI} \\ 
+\hline
+\textbf{Modelo de Programação} & Threads & Memória Compartilhada & Troca de mensagens \\ 
+\hline
+\textbf{Arquitetura do Sistema} & Memória Compartilhada & Memória Compartilhada & Memória Distribuída e Compartilhada \\ 
+\hline
+\textbf{Modelo de comunicação} & Endereçamento compartilhado & Endereçamento compartilhado & Troca de mensagens ou Endereçamento compartilhado \\ 
+\hline
+\textbf{Sincronização} & Explícita & Implícita & Implícita ou Explícita \\ 
+\hline
+\textbf{Implementação} & Biblioteca & Compilador & Biblioteca \\ 
+\hline
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} \\ 
+\end{tabular}
+\end{table}
+\end{center}
 
 Estudos a respeito do uso de núcleos de processamento (\textit{cores}) em telefones celulares com o Sistema Operacional Android demonstram que estes são usados de maneira ineficiente \cite{gao2015study} \cite{wu2013study}. Isso ocorre principalmente pela maneira de programação dos \textit{softwares}, a maioria não explora recusrsos de  paralelização de maneira eficiente, outro problema observado tange a paralelização implícita não ser tão eficaz devido a complexidade de um algoritmo transformar trechos de códigos sequenciais em paralelos. Inerentemente algumas partes do código são sequenciais (inicialização, instanciação de tarefas, por exemplo) e isso provoca um aumento no tempo de execução, porém os trechos que podem ser paralelizáveis anda são pouco explorados \cite{gao2015study}.
+
+\section{Sistema IPD-PCA}
+
+Para a implementação do sistema proposto levamos em consideração que o problema de aprendizagem é supervisionado, logo, temos que os padrões utilizados para o treinamento possuem uma classe pré-especificada. O sistema será dividido em duas etapas: aprendizado (treino) e operação (teste).
+
+Na fase de aprendizado será dividido em quatro etapas: conjunto de treino, pré-processamento, extração de características e modelo. A fase de teste, por sua vez, será dividida em seis etapas: Meio físico, sensor, pré-processamento, extração de características, classificador e modelo. As etapas de pré-processamento e extração de características são idênticas em ambas as fases.
+
+\subsection{Pré-Processamento}\label{Pre-Proc}
+
+Nessa fase temos um conjunto de imagem de onde serão extraídas as características desejadas para a construção de um modelo. Sequencialmente cada uma das imagens passarão pelos seguintes procedimentos:
+
+\begin{itemize}
+\item É realizado o enquadramento de face na imagem através do algoritmo de Viola-Jones \cite{viola2004robust};
+
+\item Em seguida a imagem é reescalada para uma dimensão pré-definida 220x220;
+
+\item A seguir é aplicada a uma correção de iluminação através da correção do fator gama, filtragem por diferença de gaussianas e equalização de contraste \cite{tan2010enhanced};
+
+\end{itemize}
+
+Na Figura \ref{fig_PreProc_schema} temos a ilustração do esquema do bloco de pré-processamento e todas as sua fases. 
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=1.0]{figuras/preProc_schema.png}
+\caption{Bloco de Pré-Processamento}
+\label{fig_PreProc_schema}
+\end{figure}
+
+
+\subsection{Treinamento}
+
+Na fase de treinamento utiliza-se dois procedimentos iniciais, são eles:  região de interesse e definição das classes:
+
+\subsubsection*{Região de Interesse}
+
+A saída desse bloco de Pré Processamento será uma imagem de dimensão 220x220 (conforme mostrado na Figura \ref{fig_PreProc_schema}) e será a entrada no bloco de treino. Primeiramente iremos reduzir o espaço de busca de modo a se obter a região de interesse - \textit{Region Of Interest} (ROI) - através de um modelo probabilístico gaussiano denominado \textit{Modelo Gaussiano à Priori}. Essa zona se refere a uma região elíptica que é obtida da seguinte forma: seja $\mathcal{X}$ uma variável aleatória  no \textit{N} realizações iguais à coordenadas $\rm x_{i}$ do conjunto de imagens de treinamento (onde \textit{i}={1, 2,..., N}), a região de interesse será obtido através da função de densidade de probabilidade gaussiana com média $\mu_\mathcal{X}$ e matriz de covariância \textbf{$\mathbf{\Sigma}_\mathcal{X}$}. Calcula-se para todas as realizações de $\rm x_{i}$ o valor máximo da distância euclidiana entre $\mu_\mathcal{X}$ e $\rm x_{i}$. A esse valor será acrescentado 5\% como uma margem de segurança, e assim obteremos a região de interesse que pode ser observada na Figura \ref{fig_ROI}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.6]{figuras/ROI.png}
+\caption{Definição da região de interesse a partir do bloco de pré-processamento.}
+\label{fig_ROI}
+\end{figure}
+
+\subsubsection*{Definição das Classes}
+
+As classes serão classificada entre positivos quando se tratar de blocos com centros em pontos fiduciais e negativos quando se referir a outros blocos. De acordo com o que foi definido na Seção \ref{cap-IPD-PCA} são consideradas três classes por IPD, a classificação em positivos e negativos dar-se-á da seguinte forma:
+
+\begin{itemize}
+\item A classe $\mathcal{A}_{1}$ será definida como positivo;
+
+\item A classe $\mathcal{A}_{2}$ e $\mathcal{B}$ será definida como negativo;
+\end{itemize}
+
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=1.5]{figuras/Classes.png}
+\caption{O bloco centrado sobre o canto direito do olho esquerdo marcado como positivo terá suas componentes principais extraídas para treinamento de um IPD $h_{\Phi}$, as demais são classificadas como negativas}
+\label{fig_Classes}
+\end{figure}
+
+\subsubsection*{Procedimentos para Treinamento}
+
+A etapa de treinamento terá como saída terá como saída os vetores $h_{\phi _i}$ e os classificadores AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}\cite{cornelius2007efficient}. Os vetores $h_{\phi _1}$ serão criados conforme mostrado na Seção \ref{cap-IPD-PCA}, e os classificadores serão responsáveis por receber as imagens do conjunto de validação e retornar os candidatos a pontos fiduciais.
+
+Para obtermos os classificadores executaremos todos os passos descritos anteriormente, são eles:
+
+\begin{itemize}
+\item Pré-Processamento: onde é detectada a face, reescalada, corrigida a iluminação;
+
+\item Região de Interesse: em seguida a imagem é segmentada, afim de se obter a região de interesse;
+
+\item Finalmente são definidos as classes como \textit{Positivo} e \textit{Negativo};
+\end{itemize}
+
+Posteriormente é construído o classificador local $h_{\phi _i}$ para a \textit{i}-ésima componente principal (\textit{i}=1, 2,...N) do bloco que tem como centro o ponto fiducial desejado utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{N} vetores $h_{\phi _N}$ é iniciado o treinamento do classificador AdaBoost, que será responsável pela detecção das classes em positivos e negativos. Essa separação se dá através do produto interno entre os IPDs ($h_{\phi _i}$) e os blocos $B_{Z}$ de positivos e negativos (onde z refere-se a coordenada referente ao centro do bloco.)
+
+O diagrama final do procedimento de treinamento é dado na Figura \ref{fig_Train_Schema}. Para o treinamento do sistema desenvolvido em \cite{waldir}, o número de componentes principais na maioria dos pontos fiduciais definidos na marcação foi de N = 63, com N = 53 nos demais pontos.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.45]{figuras/Train_Schema.png}
+\caption{Treinamento dos classificadores $h_{\phi _i}$.}
+\label{fig_Train_Schema}
+\end{figure}
+
+\subsection{Teste}
+
+Nessa fase  verifica-se o desempenho so sistema de detecção de pontos fiduciais, o diagrama em blocos dessa etapa pode ser observado na Figura \ref{fig_Test}. Podemos descrever essa etapa da seguinte forma: \textit{i}) realizamos o pré-processamento, utilizando o mesmo procedimento descrito na Seção \ref{Pre-Proc}; \textit{ii}) as imagens serão processadas por uma janela deslizante $B_{Z}$ (onde z é a coordenada correspondente ao centro do bloco); \textit{iii}) acrescentamos uma dimensão extra em $B_{Z}$ utilizando $E_{m}$ (máxima norma) e subtraindo por $\mu$ (média global), o vetor resultante será denominado $b_{Z}$. Dessa forma, cada bloco $B_{Z}$ terá um correspondente $b_{Z}$; \textit{iv}) A seguir, cada $b_{Z}$ será classificado pela cascata de
+classificadores IPD determinados no treinamento; \textit{v}) Realiza-se a etapa de pós-processamento;
+
+A saída anterior so pós-processamento é uma nuvem de pontos, coordenadas no plano da imagem de prova reescalonada. A partir dessa nuvem escolheremos apenas uma coordenada que será candidato eleito a ponto fiducial. Com base em \cite{waldir}, temos quatro estratégias discutidas a seguir:
+
+\begin{itemize}
+\item A estratégia de acrônimo \textit{NA} não realiza nenhuma modificação na saída do bloco AdaBoost. Assim, todos os elementos da nuvem são considerados saídas do método;
+
+\item A segunda estratégia é denominada \textit{ML}, ela seleciona a coordenada mais provável, supondo o modelo gaussiano a priori como critério de decisão;
+
+\item A estratégia \textit{GML} agrupa os elementos com distância menor que \textit{P} pixels e seleciona os resultados dos agrupamentos conforme \textit{ML};
+
+\item A estratégia \textit{A} dá como saída do método a média dos elementos da nuvem;
+\end{itemize}
+
+A proposta apresentada propõe como estratégia de pós-processamento a \textit{NA}, ou seja, todos os rótulos automáticos serão considerados como saída do sistema de
+detecção de pontos fiduciais por IPD-PCA.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.48]{figuras/Test.png}
+\caption{Treinamento dos classificadores $h_{\phi _i}$.}
+\label{fig_Test}
+\end{figure}
+
 
 \chapter{Fundamentos Específicos}\label{cap-especifico}
 
