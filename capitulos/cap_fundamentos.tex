@@ -236,97 +236,73 @@ Estudos a respeito do uso de núcleos de processamento (\textit{cores}) em telefo
 
 \section{Sistema IPD-PCA}
 
-Para a implementação do sistema proposto levamos em consideração que o problema de aprendizagem é supervisionado, logo, temos que os padrões utilizados para o treinamento possuem uma classe pré-especificada. O sistema será dividido em duas etapas: aprendizado (treino) e operação (teste).
+Para a implementação do sistema proposto levamos em consideração que o problema de aprendizagem é supervisionado, logo, temos que os padrões utilizados para o treinamento possuem uma classe pré-especificada. O sistema será dividido em duas etapas: treino e teste.
 
-Na fase de aprendizado será dividido em quatro etapas: conjunto de treino, pré-processamento, extração de características e modelo. A fase de teste, por sua vez, será dividida em seis etapas: Meio físico, sensor, pré-processamento, extração de características, classificador e modelo. As etapas de pré-processamento e extração de características são idênticas em ambas as fases.
-
-\subsection{Pré-Processamento}\label{Pre-Proc}
-
-Nessa fase temos um conjunto de imagem de onde serão extraídas as características desejadas para a construção de um modelo. Sequencialmente cada uma das imagens passarão pelos seguintes procedimentos:
-
-\begin{itemize}
-\item É realizado o enquadramento de face na imagem através do algoritmo de Viola-Jones \cite{viola2004robust};
-
-\item Em seguida a imagem é reescalada para uma dimensão pré-definida 220x220;
-
-\item A seguir é aplicada a uma correção de iluminação através da correção do fator gama, filtragem por diferença de gaussianas e equalização de contraste \cite{tan2010enhanced};
-
-\end{itemize}
-
-Na Figura \ref{fig_PreProc_schema} temos a ilustração do esquema do bloco de pré-processamento e todas as sua fases. 
+A etapa de treino será dividida da seguinte forma: Procedimentos iniciais de treinamento, projeto dos detectores $\rm h{\phi _i}$, em seguida é realizado o uma operação de produto interno e por último é realizado o treinamento do classificador. A etapa de teste é muito semelhante a de treino, ela será dividida da seguinte forma: procedimentos iniciais para treinamento, operação de produto interno com os detectores $\rm h{\phi _i}$ (obtidos no treinamento), classificação e pós-processamento. As fases de Procedimentos Iniciais para Treinamento são idênticas em ambas as fases, o esquema da Figura \ref{fig_System_Schema} ilustra o sistema, a seguir será detalhado cada uma das etapas.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[scale=1.0]{figuras/preProc_schema.png}
-\caption{Bloco de Pré-Processamento}
-\label{fig_PreProc_schema}
+\includegraphics[scale=0.7]{figuras/System_Diagram.png}
+\caption{Diagrama em bloco so sistema.}
+\label{fig_System_Schema}
 \end{figure}
 
+\subsection{Treino}\label{treino}
 
-\subsection{Treinamento}
-
-Na fase de treinamento utiliza-se dois procedimentos iniciais, são eles:  região de interesse e definição das classes:
-
-\subsubsection*{Região de Interesse}
-
-A saída desse bloco de Pré Processamento será uma imagem de dimensão 220x220 (conforme mostrado na Figura \ref{fig_PreProc_schema}) e será a entrada no bloco de treino. Primeiramente iremos reduzir o espaço de busca de modo a se obter a região de interesse - \textit{Region Of Interest} (ROI) - através de um modelo probabilístico gaussiano denominado \textit{Modelo Gaussiano à Priori}. Essa zona se refere a uma região elíptica que é obtida da seguinte forma: seja $\mathcal{X}$ uma variável aleatória  no \textit{N} realizações iguais à coordenadas $\rm x_{i}$ do conjunto de imagens de treinamento (onde \textit{i}={1, 2,..., N}), a região de interesse será obtido através da função de densidade de probabilidade gaussiana com média $\mu_\mathcal{X}$ e matriz de covariância \textbf{$\mathbf{\Sigma}_\mathcal{X}$}. Calcula-se para todas as realizações de $\rm x_{i}$ o valor máximo da distância euclidiana entre $\mu_\mathcal{X}$ e $\rm x_{i}$. A esse valor será acrescentado 5\% como uma margem de segurança, e assim obteremos a região de interesse que pode ser observada na Figura \ref{fig_ROI}
+Nessa fase desenvolvemos o aprendizado de todos os modelos dos detectores IPD, para isso usaremos uma base de dados contendo faces humanas frontais em nível de cinza, as faces possuem pequenas variações de escala (perto e mais afastado da câmera), iluminação e pequenas rotações. A Figura \ref{fig_Train_Schema} ilustra o diagrama em blocos da etapa de treinamento, a seguir explanaremos sobre o sistema.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[scale=0.6]{figuras/ROI.png}
-\caption{Definição da região de interesse a partir do bloco de pré-processamento.}
-\label{fig_ROI}
-\end{figure}
-
-\subsubsection*{Definição das Classes}
-
-As classes serão classificada entre positivos quando se tratar de blocos com centros em pontos fiduciais e negativos quando se referir a outros blocos. De acordo com o que foi definido na Seção \ref{cap-IPD-PCA} são consideradas três classes por IPD, a classificação em positivos e negativos dar-se-á da seguinte forma:
-
-\begin{itemize}
-\item A classe $\mathcal{A}_{1}$ será definida como positivo;
-
-\item A classe $\mathcal{A}_{2}$ e $\mathcal{B}$ será definida como negativo;
-\end{itemize}
-
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=1.5]{figuras/Classes.png}
-\caption{O bloco centrado sobre o canto direito do olho esquerdo marcado como positivo terá suas componentes principais extraídas para treinamento de um IPD $h_{\Phi}$, as demais são classificadas como negativas}
-\label{fig_Classes}
-\end{figure}
-
-\subsubsection*{Procedimentos para Treinamento}
-
-A etapa de treinamento terá como saída terá como saída os vetores $h_{\phi _i}$ e os classificadores AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}\cite{cornelius2007efficient}. Os vetores $h_{\phi _1}$ serão criados conforme mostrado na Seção \ref{cap-IPD-PCA}, e os classificadores serão responsáveis por receber as imagens do conjunto de validação e retornar os candidatos a pontos fiduciais.
-
-Para obtermos os classificadores executaremos todos os passos descritos anteriormente, são eles:
-
-\begin{itemize}
-\item Pré-Processamento: onde é detectada a face, reescalada, corrigida a iluminação;
-
-\item Região de Interesse: em seguida a imagem é segmentada, afim de se obter a região de interesse;
-
-\item Finalmente são definidos as classes como \textit{Positivo} e \textit{Negativo};
-\end{itemize}
-
-Posteriormente é construído o classificador local $h_{\phi _i}$ para a \textit{i}-ésima componente principal (\textit{i}=1, 2,...N) do bloco que tem como centro o ponto fiducial desejado utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{N} vetores $h_{\phi _N}$ é iniciado o treinamento do classificador AdaBoost, que será responsável pela detecção das classes em positivos e negativos. Essa separação se dá através do produto interno entre os IPDs ($h_{\phi _i}$) e os blocos $B_{Z}$ de positivos e negativos (onde z refere-se a coordenada referente ao centro do bloco.)
-
-O diagrama final do procedimento de treinamento é dado na Figura \ref{fig_Train_Schema}. Para o treinamento do sistema desenvolvido em \cite{waldir}, o número de componentes principais na maioria dos pontos fiduciais definidos na marcação foi de N = 63, com N = 53 nos demais pontos.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=0.45]{figuras/Train_Schema.png}
-\caption{Treinamento dos classificadores $h_{\phi _i}$.}
+\includegraphics[scale=0.6]{figuras/Schema_Train.png}
+\caption{Diagrama em bloco da etapa de treinamento.}
 \label{fig_Train_Schema}
 \end{figure}
 
+
+\subsubsection{Procedimentos iniciais para o treinamento}\label{Pre-Proc}
+
+A seguir detalharemos o primeiro bloco da Figura \ref{fig_Train_Schema}. Esse bloco é comum tanto a etapas de treinamento e teste, e conforme ilustrado na Figura \ref{fig_Pre-Proc}, é composto das seguintes passos: enquadramento do rosto através do método de \textit{Viola-Jones}, escalonamento da imagem, correção de iluminação, modelo gaussiano à priori (redução do espaço de busca) e definição das classes positivos e negativos. Sequencialmente cada uma das imagens passarão pelos seguintes procedimentos de modo a extrair as características desejadas para a construção de um modelo:
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.55]{figuras/PIT_Pre_Proc.png}
+\caption{Diagrama em bloco da fase Procedimentos Iniciais de treinamento.}
+\label{fig_Pre-Proc}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{Detector de faces VJ}: É realizado o enquadramento de face na imagem de entrada através do algoritmo de Viola-Jones \cite{viola2004robust};
+
+\item \textbf{Escalonamento}: Em seguida a imagem é reescalada. Essa técnica é utilizada pois as diferentes imagens não tem a mesma distância da câmera;
+
+\item \textbf{Correção de Iluminação}: A seguir é aplicada a uma correção de iluminação através da correção do fator gama, filtragem por diferença de gaussianas e equalização de contraste \cite{tan2010enhanced};
+
+\item \textbf{Modelo Gaussiano à Priori}: Feita a correção de iluminação é definido uma redução no espaço de busca segundo um modelo probabilístico gaussiano;
+
+\item \textbf{Definição das classes Positivos e Nagativos}: Finalmente serão definidas como positivos e negativos conforme explicado na seção \ref{cap-IPD-PCA}, onde as classes $\mathcal{A}_1$ será definida como positivo
+por se tratar de blocos com centros em pontos fiduciais e as classes $\mathcal{A}_2$ e $\mathcal{B}$ serão definidas como negativos por tratarem de outros blocos.
+\end{itemize}
+
+
+\subsubsection{Procedimentos para Treinamento}
+
+A seguir será explicado o funcionamento do restante dos blocos da Figura \ref{fig_Train_Schema}. Passado o bloco de procedimentos iniciais, serão projetados \textit{k} detectores $\rm h_{\phi _i}$ (\textit{i}={1,...,\textit{k}}), um para cada uma das componentes principais com maiores variâncias utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{k} vetores é iniciado o treinamento do classificador AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}, que será responsável pela detecção das classes. Cada bloco pertencente as classes de positivos e negativos (saída do bloco de procedimentos iniciais para Treinamento) será subtraído de um bloco médio de todas as classes de positivos (denominado $\mu_{U}$), em seguida, serão processados utilizando-se o produto interno $\rm h_{\phi i}^{*T}$${B_Z}$. Desse modo, cada bloco ${B_Z}$ terá um vetor associado denominado $\rm d$$_{B_Z}$ com dimensões 1x\textit{k}. O conjunto de vetores $\rm d$$_{B_Z}$ serão utilizados no treinamento do classificador  de modo que possamos discriminar blocos positivos e negativos na outra etapa (teste).
+
 \subsection{Teste}
 
-Nessa fase  verifica-se o desempenho so sistema de detecção de pontos fiduciais, o diagrama em blocos dessa etapa pode ser observado na Figura \ref{fig_Test}. Podemos descrever essa etapa da seguinte forma: \textit{i}) realizamos o pré-processamento, utilizando o mesmo procedimento descrito na Seção \ref{Pre-Proc}; \textit{ii}) as imagens serão processadas por uma janela deslizante $B_{Z}$ (onde z é a coordenada correspondente ao centro do bloco); \textit{iii}) acrescentamos uma dimensão extra em $B_{Z}$ utilizando $E_{m}$ (máxima norma) e subtraindo por $\mu$ (média global), o vetor resultante será denominado $b_{Z}$. Dessa forma, cada bloco $B_{Z}$ terá um correspondente $b_{Z}$; \textit{iv}) A seguir, cada $b_{Z}$ será classificado pela cascata de
-classificadores IPD determinados no treinamento; \textit{v}) Realiza-se a etapa de pós-processamento;
+A Figura \ref{fig_Schema_Test} ilustra o diagrama em blocos que representa a fase de teste para o sistema IPD-PCA, que será detalhado a seguir.
 
-A saída anterior so pós-processamento é uma nuvem de pontos, coordenadas no plano da imagem de prova reescalonada. A partir dessa nuvem escolheremos apenas uma coordenada que será candidato eleito a ponto fiducial. Com base em \cite{waldir}, temos quatro estratégias discutidas a seguir:
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.78]{figuras/Schema_Test.png}
+\caption{Treinamento dos classificadores $\rm 
+h_{\phi _i}$.}
+\label{fig_Schema_Test}
+\end{figure}
+
+Nessa etapa verifica-se o desempenho do sistema de detecção de pontos fiduciais, a descrição dessa etapa é feita a seguir. Inicialmente realizamos os Procedimentos Iniciais para Teste, utilizando o mesmo procedimento descrito na Seção \ref{Pre-Proc}, posteriormente utilizando uma janela deslizante selecionamos uma quantidade de blocos $B_{Z}$ aleatória em cada região de interesse por imagem (onde z é a coordenada correspondente ao centro do bloco). Em seguida processamos o produto interno dos detectores $\rm h_{\phi _i}$ (obtidos na etapa de treinamento) com $B_{Z}$ subtraído por $\mu_{U}$ (bloco médio de todas as classes de positivos, determinado na etapa de treino). Assim, cada bloco $B_{Z}$ terá um vetor $\rm d$$_{B_Z}$ associado, esse vetor  será usado para classificar $B_{Z}$. Em seguida é feito um pós-processamento conforme a estratégia escolhida.
+
+A saída do classificador AdaBoost é uma nuvem de pontos, conforme pode ser visto da Figura \ref{Pre-Proc}. A partir dessa nuvem escolheremos apenas uma coordenada que será candidato eleito a ponto fiducial. Com base em \cite{waldir}, temos quatro estratégias discutidas a seguir:
 
 \begin{itemize}
 \item A estratégia de acrônimo \textit{NA} não realiza nenhuma modificação na saída do bloco AdaBoost. Assim, todos os elementos da nuvem são considerados saídas do método;
@@ -337,17 +313,6 @@ A saída anterior so pós-processamento é uma nuvem de pontos, coordenadas no plan
 
 \item A estratégia \textit{A} dá como saída do método a média dos elementos da nuvem;
 \end{itemize}
-
-A proposta apresentada propõe como estratégia de pós-processamento a \textit{NA}, ou seja, todos os rótulos automáticos serão considerados como saída do sistema de
-detecção de pontos fiduciais por IPD-PCA.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=0.48]{figuras/Test.png}
-\caption{Treinamento dos classificadores $h_{\phi _i}$.}
-\label{fig_Test}
-\end{figure}
-
 
 \chapter{Fundamentos Específicos}\label{cap-especifico}
 
