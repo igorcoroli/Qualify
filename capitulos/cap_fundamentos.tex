@@ -316,5 +316,36 @@ A saída do classificador AdaBoost é uma nuvem de pontos, conforme pode ser visto
 
 \chapter{Fundamentos Específicos}\label{cap-especifico}
 
-\section{Contextualização do Problema} \label{sec_IPD}
+\section{Contextualização do Problema} \label{sec_Problem}
+
+Diversos estudos acerca de desempenho computacional tem-se desenvolvido, uma dessas linhas de pesquisa diz respeito a utilização de \textit{cores} (ou núcleos de processamento). Trabalhos como de \cite{flautner2000thread}, \cite{gao2015study}, \cite{wu2013study} apontam que os \textit{cores}, de modo geral, são subutilizados e o incremento na quantidade de núcleos não traduz de forma proporcional em ganho de performance. As aplicações anteriores aos processadores \textit{multi-cores} utilizavam-se do paradigma sequencial de programação, e muitas aplicações atuais não exploram recursos de paralelização das tarefas \cite{flautner2000thread}.
+
+Os sistemas embarcados por sua vez também acompanharam a evolução dos processadores e incorporaram a arquitetura \textit{multi-core}. A plataforma Android, amplamente utilizada em diversos sistemas embarcados, não explora de maneira eficiente todos os recursos do seu processador, fazendo assim com que alguns processos levem mais tempo para serem executados além de sobrecarregar outros \textit{cores} \cite{gao2015study}. Geralmente isso ocorre por causa do paralelismo implícito (no qual o próprio sistema operativo é encarregado de paralelizar trechos das aplicações), pois a paralelização de um programa é tarefa extremamente complexa e variável para um algoritmo fazer sempre de forma eficiente.
+
+Embora o processamento dos sistemas embarcados estejam cada dia mais velozes, de um modo geral, o processamento digital de imagens ainda demanda por bastante poder de processamento. Se tomarmos como referência aplicações Android, perceberemos que a maioria não explora de maneira satisfatória todos os recursos do seus núcleos, nem mesmo as aplicações nativas (desenvolvidos pelo próprio Google), conforme afirma \cite{gao2015study}. Esse fato aliado a pouca quantidade de memória RAM (do inglês, \textit{Random Access Memory}) que possui a maioria desses dispositivos nos permite inferir que há uma sobrecarga de processamento em aplicações mais pesadas como, por exemplo, as que detectam pontos fiduciais e/ou reconhecimento facial.
+
+A ideia central desse trabalho é de identificar as estruturas paralelizáveis no modelo IPD-PCA proposto por \cite{waldir} em um \textit{smartphone} de plataforma Android e processá-las usando técnicas de computação paralela. Nas seções posteriores serão detalhados as abordagens e modificações no modelo.
+
+
+\section{Modelo Proposto} \label{sec_ModeloProposto}
+
+As Figuras \ref{fig:ParalelismoTreino} e \ref{fig:ParalelismoTeste} ilustram as modificações na etapa de treino e de teste, respectivamente, propostas nesse trabalho. Conforme podemos perceber as fases de Procedimentos Iniciais para Treinamento é a mesma para ambas as etapas (Treino e Teste), ela constitui-se dos procedimentos mostrados na seção \ref{Pre-Proc} de forma sequencial, sendo que cada bloco depende do resultado do bloco anterior, desse modo não há meios de paralelizá-lo.
+
+O bloco Projeto de $\rm h_{\phi _i}$, por sua vez é uma das estruturas as quais se propõe paralelização. Será construído um classificador para cada uma das componentes principais, o número de componentes principais na maioria dos pontos fiduciais definidos na marcação de \cite{waldir2010facial} foi de \textit{N}=63, com \textit{N}=53 nos demais pontos.
+
+\begin{figure}[h]
+\subfigure[Esquema da paralelização proposta para o bloco de Treino]{
+\includegraphics[scale=0.64]{figuras/Parallelism_Block_Train.png}
+\label{fig:ParalelismoTreino}
+}
+\subfigure[Esquema da paralelização proposta para o bloco de Teste]{
+\includegraphics[scale=0.72]{figuras/Parallelism_Block_Test.png}
+\label{fig:ParalelismoTeste}}
+\caption{Esquema de modificações proposto para as etapas de Treino e de Teste}
+\end{figure}
+
+\section{Avaliações de Desempenho} \label{sec_Desempenho}
+
+Aqui eu tô pensando em usar TLP (\textit{Thread Level Parallelism}) pra comparar o método:  sem usar paralelismo x com paralelismo. Acho que medir tempo também seria uma boa.
+
 
