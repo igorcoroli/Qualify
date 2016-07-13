@@ -284,7 +284,7 @@ por se tratar de blocos com centros em pontos fiduciais e as classes $\mathcal{A
 \end{itemize}
 
 
-\subsubsection{Procedimentos para Treinamento}
+\subsubsection{Procedimentos para Treinamento}\label{Procedimentos-Treino}
 
 A seguir será explicado o funcionamento do restante dos blocos da Figura \ref{fig_Train_Schema}. Passado o bloco de procedimentos iniciais, serão projetados \textit{k} detectores $\rm h_{\phi _i}$ (\textit{i}={1,...,\textit{k}}), um para cada uma das componentes principais com maiores variâncias utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{k} vetores é iniciado o treinamento do classificador AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}, que será responsável pela detecção das classes. Cada bloco pertencente as classes de positivos e negativos (saída do bloco de procedimentos iniciais para Treinamento) será subtraído de um bloco médio de todas as classes de positivos (denominado $\mu_{U}$), em seguida, serão processados utilizando-se o produto interno $\rm h_{\phi i}^{*T}$${B_Z}$. Desse modo, cada bloco ${B_Z}$ terá um vetor associado denominado $\rm d$$_{B_Z}$ com dimensões 1x\textit{k}. O conjunto de vetores $\rm d$$_{B_Z}$ serão utilizados no treinamento do classificador  de modo que possamos discriminar blocos positivos e negativos na outra etapa (teste).
 
@@ -329,9 +329,11 @@ A ideia central desse trabalho é de identificar as estruturas paralelizáveis no 
 
 \section{Modelo Proposto} \label{sec_ModeloProposto}
 
-As Figuras \ref{fig:ParalelismoTreino} e \ref{fig:ParalelismoTeste} ilustram as modificações na etapa de treino e de teste, respectivamente, propostas nesse trabalho. Conforme podemos perceber as fases de Procedimentos Iniciais para Treinamento é a mesma para ambas as etapas (Treino e Teste), ela constitui-se dos procedimentos mostrados na seção \ref{Pre-Proc} de forma sequencial, sendo que cada bloco depende do resultado do bloco anterior, desse modo não há meios de paralelizá-lo.
+As Figuras \ref{fig:ParalelismoTreino} e \ref{fig:ParalelismoTeste} ilustram as modificações na etapa de treino e de teste, respectivamente, propostas nesse trabalho. Conforme podemos perceber a fase de Procedimentos Iniciais para Treinamento é a mesma para ambas as etapas (Treino e Teste), ela constitui-se dos procedimentos mostrados na seção \ref{Pre-Proc} de forma sequencial, desse modo não há meios de paralelizá-lo.
 
-O bloco Projeto de $\rm h_{\phi _i}$, por sua vez é uma das estruturas as quais se propõe paralelização. Será construído um classificador para cada uma das componentes principais, o número de componentes principais na maioria dos pontos fiduciais definidos na marcação de \cite{waldir2010facial} foi de \textit{N}=63, com \textit{N}=53 nos demais pontos.
+A estrutura Projeto de $\rm h_{\phi _i}$ (Figura \ref{fig:ParalelismoTreino}), por sua vez é uma das partes a qual se propõe paralelizar. Para cada ponto fiducial, um conjunto de detectores em cascata é utilizado para realizar a detecção, sendo que esse conjunto será constituído \textit{N} detectores (um detector para cada uma das componentes principais) conforme definido na seção \ref{sec_IPD}, o número de componentes principais na maioria dos pontos fiduciais definidos por \cite{waldir2010facial} foi de \textit{N}=63, com \textit{N}=53 nos demais pontos. A intenção é de que cada um desses detectores possam ser construídos de forma paralela modificando assim a característica sequencial do algoritmo.
+
+Outra estrutura no qual é proposta mudança diz respeito ao Produto Interno $\rm h_{\phi i}^{*T}$${B_Z}$. Nessa fase cada um dos \textit{N} detectores realizará uma operação de produto interno com cada um dos blocos $B_{Z}$ definidos na seção \ref{Pre-Proc}. Tomando como referência \cite{waldir} que definiu 50 blocos negativos e 1 positivo para cada imagem e adotando 53 detectores teremos 2703 operações de produto interno por imagem, se levarmos em consideração que o mesmo utilizou 503 imagens teremos um total de 1359609 operações de produto interno. A proposta de paralelizar essas operações pressupõe ganho em eficiência, uma vez que deixará de ser realizada de forma sequencial.
 
 \begin{figure}[h]
 \subfigure[Esquema da paralelização proposta para o bloco de Treino]{
@@ -344,8 +346,26 @@ O bloco Projeto de $\rm h_{\phi _i}$, por sua vez é uma das estruturas as quais 
 \caption{Esquema de modificações proposto para as etapas de Treino e de Teste}
 \end{figure}
 
+As demais etapas não há modificações no sentido de paralelização, pois tratam-se de trechos sequenciais. De um modo geral uma contribuição é tornar o algoritmo paralelizáveis em todos os pontos possíveis, pois o desenvolvimento \textit{multi-threads} consegue extrair o máximo de eficiência dos processadores \textit{multicores}. Uma alternativa para isso seria a paralelização usando a API OpenMP e a utilização da biblioteca OpenCV (\textit{Open Source Computer Vision Library}) de modo a facilitar o trabalho. Outra contribuição seria a aplicação do classificador em uma plataforma móvel, uma vez que a mesma só foi desenvolvida para plataformas do tipo \textit{desktop}.
+
 \section{Avaliações de Desempenho} \label{sec_Desempenho}
 
 Aqui eu tô pensando em usar TLP (\textit{Thread Level Parallelism}) pra comparar o método:  sem usar paralelismo x com paralelismo. Acho que medir tempo também seria uma boa.
 
+Nem todas as aplicações obtém a mesma melhora no desempenho quando executadas com paralelismo. Isso depende da quantidade de código paralelizável que a aplicação possui. Algumas métricas são comumente utilizadas para medir o desempenho de sistemas paralelos. São elas, o tempo de execução, \textit{speedup}, eficiência e o custo. 
 
+O \textbf{tempo de execução} de um algoritmo é o tempo necessário para resolver um problema. O tempo de processamento de um algoritmo é o tempo gasto executando o processamento sem contar a comunicação e a ociosidade. 
+
+Em computação paralela, o \textit{\textbf{speedup}} é utilizado para conhecer o quão um algoritmo paralelo é mais rápido que seu correspondente sequencial. Quanto mais trechos forem paralelizáveis menor será o tempo gasto, o \textit{Speedup} pode ser obtido pela equação \ref{eq_speedup}.
+
+\begin{equation} \label{eq_speedup}
+Speedup = \frac{{Tempo\,Serial}}{{Tempo\,Paralelo}}
+\end{equation}
+
+Outra métrica de desempenho para se medir o ganho em ambientes paralelos é a \textbf{eficiência} que é determinada pela fração entre o \textit{Speedup} de \textit{p} processadores sobre \textit{p}, conforme pode ser visto na equação .
+
+\begin{equation} \label{eq_speedup}
+efici\^e nci{a_{(p)}} = \frac{{Speedu{p_{(p)}}}}{p}
+\end{equation}
+
+O \textbf{custo} reflete a soma do tempo que cada processador  gasta resolvendo um problema, essa métrica é o produto do tempo de execução  e o número de processadores utilizados. Para um único processador, o custo é o tempo de execução do algoritmo sequencial mais rápido conhecido.
