@@ -197,13 +197,19 @@ Finalmente, a equação \eqref{eq_IPD-B-PCA_Final} expressa o detector por produto
 
 A ideia central da computação paralela é de que um tarefa geralmente pode ser dividida em partes menores e executadas de forma concorrente. Atualmente existem duas abordagens no que tange a computação paralela, a primeira diz respeito aos \textit{multi-cores}, integra alguns núcleos (entre dois e dez) em um único microprocessador, como exemplo temos \textit{desktops}, \textit{smartphones}, etc. A segunda relaciona-se aos \textit{many-cores} e faz uso de um grande número de núcleos (geralmente várias centenas) e está especialmente orientada à execução de programas paralelos, o principal exemplo desse modelo são as GPUs (\textit{Graphics Processing Unit}) \cite{diaz2012survey}.
 
-No que tange a arquitetura podemos destacar a quantidade de \textit{cores} já quanto a questão de \textit{software} para computação paralela podemos destacar algumas APIs\footnote{do inglês \textit{Application Programming Interface} é um conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.}, as quais são baseadas no tipo de memória utilizada (compartilhada ou distribuída). Destaca-se \textit{POSIX Threads}, \textit{OpenMP} e MPI. A tabela \ref{tab_difPar} comenta as principais diferenças.
+Nas literaturas uma plataforma geralmente é definida como a combinação do \textit{hardware} com um sistema operacional o qual coordena o conjunto de instruções de um processador. Com o advento da tecnologia \textit{multi-core} a forma de processamento mudou, dividindo-se a carga de trabalho entre os processadores existentes. Quando a paralelização dessas tarefas é feita pelo próprio sistema operacional dizemos que se trata de um paralelismo implícito, em contrapartida quando a paralelização é feita pelo usuário (programador) dizemos que a paralelização é explícita.
 
-O OpenMP é uma API aplicado a arquiteturas de programação paralela de memória compartilhada, ela é orientada para a tarefa e trabalha em um nível de abstração mais elevado do que as \textit{threads}. Essa API é portável entre arquiteturas de memória compartilhada, e a transição dos trechos sequenciais-paralelos se dão através da estrutura \textit{fork/join}. O elevado nível de abstração e a facilidade da API tornam o OpenMP adequado para o desenvolvimento de aplicações de HPC em sistemas de memória compartilhada \cite{diaz2012survey}.
+Entende-se por modelo de programação a interface que estabelece uma ligação entre a linguagem de programação e a arquitetura do sistema. Existem duas arquiteturas básicas que divergem quanto ao acesso a memória, que podem ser compartilhado (onde existe uma única memória que é compartilhada para todos os núcleos) e distribuída (quando cada núcleo tem sua própria memória). Diversos outros modelos podem ser encontrados na literatura como os baseados em troca de mensagens, \textit{threads}, híbridos, entre outros. Existem diversas ferramentas que facilitam a implementação da paralelização em um algoritmo, falaremos sobre as principais a seguir.
 
-\textit{POSIX Threads} (do inglês, \textit{Portable Operating System Interface}), também conhecido como \textit{Pthreads} é um modelo baseado em memória compartilhada que padroniza o uso de \textit{threads} entre diferentes sistemas operativo/arquiteturas. \textit{Pthreads} são definidas como um conjunto de tipos de dados em C e um conjunto de rotinas.
+O MPI (\textit{Message Passing}), é uma biblioteca padrão de programação paralela aplicado a memórias distribuídas, que faz uso de troca de mensagens para a comunicação inter-processos. Dessa forma, os programas podem ser compilados em linguagens como C ou C++ e ligados a essa biblioteca. O objetivo do MPI é estabelecer um padrão portável, eficiente e flexível na execução de  programas que utilizem troca de mensagens, além de garantir a portabilidade dos nos diversos tipos de máquinas paralelas que fazem seu uso. Em MPI o particionamento de carga de trabalho e mapeamento de tarefas deve ser feito pelo programador, assim, a sincronização nesse modelo é um fator de risco. Esse modelo é comumente utilizado em \textit{clusters} de \textit{workstations}
 
-O MPI (\textit{Message Passing}), é um modelo de programação paralela aplicado a memórias distribuídas que faz uso de troca de mensagens para a comunicação entre processos. No MPI diferentes processos podem executar diferentes programas, por isso também é relacionado como MPMD (\textit{multiple program multiple data}). A principal vantagem do MPI é portabilidade entre diferentes plataformas e a simplificação de tarefas através das rotinas implementadas.
+POSIX \textit{Threads} (do inglês, \textit{Portable Operating System Interface} - Interface Portável entre Sistemas Operacionais), também conhecido como \textit{Pthreads} é um modelo baseado em memória compartilhada que padroniza o uso de \textit{threads} entre diferentes sistemas operativo/arquiteturas. Esse modelo foi especificado pelo padrão IEEE 1003.1c POSIX, de modo que implementações que aderem a este padrão são referidos como POSIX \textit{threads} , ou Pthreads, e implementam uma API para a escrita de aplicações \textit{multithreads}. A biblioteca Pthreads fornece funções para criar e destruir \textit{threads} e para coordenar suas atividades através de acesso exclusivo em locais selecionados de memória. Este modelo é especialmente adequado para o padrão de junção \textit{fork}/\textit{join} de programação paralela.
+
+O OpenMP é uma API cujo o objetivo é o desenvolvimento de aplicações \textit{multithreads} de uma forma mais fácil em ambientes de programação C/C++ e Fortran. O OpenMP utiliza-se de memória compartilhada, desse modo, cada \textit{core} poderá ler e escrever em todo o espaço da memória do sistema. Esse modelo possibilita o paralelismo incremental além de combinações de parte de código escrito de forma serial e parte paralela, em um único código fonte. Nesse modelo nem todas as características são explícitas como no MPI, a sincronização das tarefas que serão executadas de forma concorrente serão controladas pelo programador enquanto o mapeamento das tarefas entre os processadores não. A API trabalha em um nível de abstração mais elevado do que as \textit{threads}, é portável entre arquiteturas de memória compartilhada, e a transição dos trechos sequenciais-paralelos se dão através da estrutura \textit{fork/join}. O elevado nível de abstração e a facilidade da API tornam o OpenMP adequado para o desenvolvimento de aplicações em sistemas de memória compartilhada \cite{diaz2012survey}.
+
+Para sistemas híbridos, isso é, aqueles que dispões de memórias compartilhada e distribuída, é necessário coexistir, no mínimo, dois modelos. A integração de dois ou mais modelos de modo a permitir utilizar todo o poder computacional é um desafio. Na tabela \ref{tab_difPar}, fazemos um resumo dos principais modelos descritos bem como suas principais características, perceba que alguns modelos podem ser implementados tanto em memória compartilhada como em distribuída.
+
+Estudos a respeito do uso de núcleos de processamento (\textit{cores}) em telefones celulares com o Sistema Operacional Android demonstram que estes são usados de maneira ineficiente \cite{gao2015study} \cite{wu2013study}. Isso ocorre principalmente pela maneira de programação dos \textit{softwares}, a maioria não explora recursos de  paralelização de maneira eficiente, outro problema observado tange a paralelização implícita não ser tão eficaz devido a complexidade de um algoritmo transformar trechos de códigos sequenciais em paralelos. Inerentemente algumas partes do código são sequenciais (inicialização, instanciação de tarefas, por exemplo) e isso provoca um aumento no tempo de execução, porém os trechos que podem ser paralelizáveis anda são pouco explorados \cite{gao2015study}.
 
 \begin{center}
 \begin{table}[tbh]
@@ -217,7 +223,7 @@ O MPI (\textit{Message Passing}), é um modelo de programação paralela aplicado a
 \hline
 \textbf{Implementação} & \textbf{Pthreads} & \textbf{OpenMP} & \textbf{MPI} \\ 
 \hline
-\textbf{Modelo de Programação} & Threads & Memória Compartilhada & Troca de mensagens \\ 
+\textbf{Modelo de Programação} & \textit{Threads} & Memória Compartilhada & Troca de mensagens \\ 
 \hline
 \textbf{Arquitetura do Sistema} & Memória Compartilhada & Memória Compartilhada & Memória Distribuída e Compartilhada \\ 
 \hline
@@ -231,8 +237,6 @@ O MPI (\textit{Message Passing}), é um modelo de programação paralela aplicado a
 \end{tabular}
 \end{table}
 \end{center}
-
-Estudos a respeito do uso de núcleos de processamento (\textit{cores}) em telefones celulares com o Sistema Operacional Android demonstram que estes são usados de maneira ineficiente \cite{gao2015study} \cite{wu2013study}. Isso ocorre principalmente pela maneira de programação dos \textit{softwares}, a maioria não explora recusrsos de  paralelização de maneira eficiente, outro problema observado tange a paralelização implícita não ser tão eficaz devido a complexidade de um algoritmo transformar trechos de códigos sequenciais em paralelos. Inerentemente algumas partes do código são sequenciais (inicialização, instanciação de tarefas, por exemplo) e isso provoca um aumento no tempo de execução, porém os trechos que podem ser paralelizáveis anda são pouco explorados \cite{gao2015study}.
 
 \section{Sistema IPD-PCA}
 
@@ -266,7 +270,7 @@ A seguir detalharemos o primeiro bloco da Figura \ref{fig_Train_Schema}. Esse bl
 \begin{figure}[!htb]
 \centering
 \includegraphics[scale=0.55]{figuras/PIT_Pre_Proc.png}
-\caption{Diagrama em bloco da fase Procedimentos Iniciais de treinamento.}
+\caption{Diagrama em bloco da fase Procedimentos Iniciais de treinamento (adaptado de Sabino\cite{waldir}).}
 \label{fig_Pre-Proc}
 \end{figure}
 
@@ -286,7 +290,7 @@ por se tratar de blocos com centros em pontos fiduciais e as classes $\mathcal{A
 
 \subsubsection{Procedimentos para Treinamento}\label{Procedimentos-Treino}
 
-A seguir será explicado o funcionamento do restante dos blocos da Figura \ref{fig_Train_Schema}. Passado o bloco de procedimentos iniciais, serão projetados \textit{k} detectores $\rm h_{\phi _i}$ (\textit{i}={1,...,\textit{k}}), um para cada uma das componentes principais com maiores variâncias utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{k} vetores é iniciado o treinamento do classificador AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}, que será responsável pela detecção das classes. Cada bloco pertencente as classes de positivos e negativos (saída do bloco de procedimentos iniciais para Treinamento) será subtraído de um bloco médio de todas as classes de positivos (denominado $\mu_{U}$), em seguida, serão processados utilizando-se o produto interno $\rm h_{\phi i}^{*T}$${B_Z}$. Desse modo, cada bloco ${B_Z}$ terá um vetor associado denominado $\rm d$$_{B_Z}$ com dimensões 1x\textit{k}. O conjunto de vetores $\rm d$$_{B_Z}$ serão utilizados no treinamento do classificador  de modo que possamos discriminar blocos positivos e negativos na outra etapa (teste).
+A seguir será explicado o funcionamento do restante dos blocos da Figura \ref{fig_Train_Schema}. Passado o bloco de procedimentos iniciais, serão projetados \textit{k} detectores $\rm \textbf{h}_{\phi _i}$ (\textit{i}={1,...,\textit{k}}), um para cada uma das componentes principais com maiores variâncias utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{k} vetores é iniciado o treinamento do classificador AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}, que será responsável pela detecção das classes. Cada bloco pertencente as classes de positivos e negativos (saída do bloco de procedimentos iniciais para Treinamento) será subtraído de um bloco médio de todas as classes de positivos (denominado $\mu_{U}$), em seguida, serão processados utilizando-se o produto interno $\rm h_{\phi i}^{*T}$${B_Z}$. Desse modo, cada bloco ${B_Z}$ terá um vetor associado denominado $\rm d$$_{B_Z}$ com dimensões 1x\textit{k}. O conjunto de vetores $\rm d$$_{B_Z}$ serão utilizados no treinamento do classificador  de modo que possamos discriminar blocos positivos e negativos na outra etapa (teste).
 
 \subsection{Teste}
 
@@ -296,7 +300,7 @@ A Figura \ref{fig_Schema_Test} ilustra o diagrama em blocos que representa a fas
 \centering
 \includegraphics[scale=0.78]{figuras/Schema_Test.png}
 \caption{Treinamento dos classificadores $\rm 
-h_{\phi _i}$.}
+h_{\phi _i}$ (adaptado de Sabino\cite{waldir}).} 
 \label{fig_Schema_Test}
 \end{figure}
 
@@ -314,15 +318,15 @@ A saída do classificador AdaBoost é uma nuvem de pontos, conforme pode ser visto
 \item A estratégia \textit{A} dá como saída do método a média dos elementos da nuvem;
 \end{itemize}
 
-\chapter{Fundamentos Específicos}\label{cap-especifico}
+\chapter{Proposta}\label{cap-especifico}
 
 \section{Contextualização do Problema} \label{sec_Problem}
 
 Diversos estudos acerca de desempenho computacional tem-se desenvolvido, uma dessas linhas de pesquisa diz respeito a utilização de \textit{cores} (ou núcleos de processamento). Trabalhos como de \cite{flautner2000thread}, \cite{gao2015study}, \cite{wu2013study} apontam que os \textit{cores}, de modo geral, são subutilizados e o incremento na quantidade de núcleos não traduz de forma proporcional em ganho de performance. As aplicações anteriores aos processadores \textit{multi-cores} utilizavam-se do paradigma sequencial de programação, e muitas aplicações atuais não exploram recursos de paralelização das tarefas \cite{flautner2000thread}.
 
-Os sistemas embarcados por sua vez também acompanharam a evolução dos processadores e incorporaram a arquitetura \textit{multi-core}. A plataforma Android, amplamente utilizada em diversos sistemas embarcados, não explora de maneira eficiente todos os recursos do seu processador, fazendo assim com que alguns processos levem mais tempo para serem executados além de sobrecarregar outros \textit{cores} \cite{gao2015study}. Geralmente isso ocorre por causa do paralelismo implícito (no qual o próprio sistema operativo é encarregado de paralelizar trechos das aplicações), pois a paralelização de um programa é tarefa extremamente complexa e variável para um algoritmo fazer sempre de forma eficiente.
+Os sistemas embarcados por sua vez também acompanharam a evolução dos processadores e incorporaram a arquitetura \textit{multi-core}. Estudos realizados por \cite{gao2015study} apontam, por exemplo, que a plataforma Android não explora de maneira eficiente todos os recursos do seu processador, fazendo assim com que alguns processos levem mais tempo para serem executados além de sobrecarregar outros \textit{cores}. Salienta-se que isso ocorre, geralmente, por causa do paralelismo implícito (no qual o próprio sistema operativo é encarregado de paralelizar trechos das aplicações), de modo que a paralelização de um programa é tarefa extremamente complexa e variável para um algoritmo do sistema operacional fazer sempre de forma eficiente.
 
-Embora o processamento dos sistemas embarcados estejam cada dia mais velozes, de um modo geral, o processamento digital de imagens ainda demanda por bastante poder de processamento. Se tomarmos como referência aplicações Android, perceberemos que a maioria não explora de maneira satisfatória todos os recursos do seus núcleos, nem mesmo as aplicações nativas (desenvolvidos pelo próprio Google), conforme afirma \cite{gao2015study}. Esse fato aliado a pouca quantidade de memória RAM (do inglês, \textit{Random Access Memory}) que possui a maioria desses dispositivos nos permite inferir que há uma sobrecarga de processamento em aplicações mais pesadas como, por exemplo, as que detectam pontos fiduciais e/ou reconhecimento facial.
+Embora o processamento dos sistemas embarcados estejam cada dia mais velozes, de um modo geral, o processamento digital de imagens ainda demanda por bastante poder de processamento. Se tomarmos como referência aplicações Android, perceberemos que a maioria não explora de maneira satisfatória todos os recursos dos seus núcleos, nem mesmo as aplicações nativas (desenvolvidos pelo próprio Google), conforme afirma \cite{gao2015study}. Esse fato aliado a pouca quantidade de memória RAM que possui a maioria desses dispositivos nos permite inferir que há uma sobrecarga de processamento em aplicações mais pesadas como, por exemplo, as que detectam pontos fiduciais e/ou reconhecimento facial.
 
 A ideia central desse trabalho é de identificar as estruturas paralelizáveis no modelo IPD-PCA proposto por \cite{waldir} em um \textit{smartphone} de plataforma Android e processá-las usando técnicas de computação paralela. Nas seções posteriores serão detalhados as abordagens e modificações no modelo.
 
@@ -331,9 +335,9 @@ A ideia central desse trabalho é de identificar as estruturas paralelizáveis no 
 
 As Figuras \ref{fig:ParalelismoTreino} e \ref{fig:ParalelismoTeste} ilustram as modificações na etapa de treino e de teste, respectivamente, propostas nesse trabalho. Conforme podemos perceber a fase de Procedimentos Iniciais para Treinamento é a mesma para ambas as etapas (Treino e Teste), ela constitui-se dos procedimentos mostrados na seção \ref{Pre-Proc} de forma sequencial, desse modo não há meios de paralelizá-lo.
 
-A estrutura Projeto de $\rm h_{\phi _i}$ (Figura \ref{fig:ParalelismoTreino}), por sua vez é uma das partes a qual se propõe paralelizar. Para cada ponto fiducial, um conjunto de detectores em cascata é utilizado para realizar a detecção, sendo que esse conjunto será constituído \textit{N} detectores (um detector para cada uma das componentes principais) conforme definido na seção \ref{sec_IPD}, o número de componentes principais na maioria dos pontos fiduciais definidos por \cite{waldir2010facial} foi de \textit{N}=63, com \textit{N}=53 nos demais pontos. A intenção é de que cada um desses detectores possam ser construídos de forma paralela modificando assim a característica sequencial do algoritmo.
+A estrutura Projeto de $\rm h_{\phi _i}$ (Figura \ref{fig:ParalelismoTreino} - bloco cinza), por sua vez é uma das partes a qual se propõe paralelizar. Para cada ponto fiducial, um conjunto de detectores em cascata é utilizado para realizar a detecção, sendo que esse conjunto será constituído \textit{N} detectores (um detector para cada uma das componentes principais) conforme definido na seção \ref{sec_IPD}, o número de componentes principais na maioria dos pontos fiduciais definidos por \cite{waldir2010facial} foi de \textit{N}=63, com \textit{N}=53 nos demais pontos. A intenção é de que cada um desses detectores possam ser construídos de forma paralela modificando assim a característica sequencial do algoritmo.
 
-Outra estrutura no qual é proposta mudança diz respeito ao Produto Interno $\rm h_{\phi i}^{*T}$${B_Z}$. Nessa fase cada um dos \textit{N} detectores realizará uma operação de produto interno com cada um dos blocos $B_{Z}$ definidos na seção \ref{Pre-Proc}. Tomando como referência \cite{waldir} que definiu 50 blocos negativos e 1 positivo para cada imagem e adotando 53 detectores teremos 2703 operações de produto interno por imagem, se levarmos em consideração que o mesmo utilizou 503 imagens teremos um total de 1359609 operações de produto interno. A proposta de paralelizar essas operações pressupõe ganho em eficiência, uma vez que deixará de ser realizada de forma sequencial.
+Outra estrutura no qual é proposta mudança diz respeito ao Produto Interno $\rm h_{\phi i}^{*T}$${B_Z}$ (Figura \ref{fig:ParalelismoTreino} e Figura \ref{fig:ParalelismoTeste} - bloco cinza). Nessa fase cada um dos \textit{N} detectores realizará uma operação de produto interno com cada um dos blocos $B_{Z}$ definidos na seção \ref{Pre-Proc}. Tomando como referência \cite{waldir} que definiu 50 blocos negativos e 1 positivo para cada imagem e adotando 53 detectores teremos 2703 operações de produto interno por imagem, se levarmos em consideração que o mesmo utilizou 503 imagens teremos um total de 1359609 operações de produto interno. A proposta de paralelizar essas operações pressupõe ganho em eficiência, uma vez que deixará de ser realizada de forma sequencial.
 
 \begin{figure}[h]
 \subfigure[Esquema da paralelização proposta para o bloco de Treino]{
@@ -346,7 +350,7 @@ Outra estrutura no qual é proposta mudança diz respeito ao Produto Interno $\rm 
 \caption{Esquema de modificações proposto para as etapas de Treino e de Teste}
 \end{figure}
 
-As demais etapas não há modificações no sentido de paralelização, pois tratam-se de trechos sequenciais. De um modo geral uma contribuição é tornar o algoritmo paralelizáveis em todos os pontos possíveis, pois o desenvolvimento \textit{multi-threads} consegue extrair o máximo de eficiência dos processadores \textit{multicores}. Uma alternativa para isso seria a paralelização usando a API OpenMP e a utilização da biblioteca OpenCV (\textit{Open Source Computer Vision Library}) de modo a facilitar o trabalho. Outra contribuição seria a aplicação do classificador em uma plataforma móvel, uma vez que a mesma só foi desenvolvida para plataformas do tipo \textit{desktop}.
+A principal contribuição do trabalho é paralelizar o algoritmo do detector IPD, uma alternativa para isso seria a utilização da API OpenMP em conjunto com a biblioteca OpenCV (\textit{Open Source Computer Vision Library}) de modo a facilitar o trabalho. O OpenMP vem de encontro com a proposta do trabalho pois trata-se de um sistema com memória compartilhada e de código fonte aberto, além de oferecer relativa facilidade devido ao seu modelo de abstração ser mais alto.
 
 \section{Avaliações de Desempenho} \label{sec_Desempenho}
 
@@ -360,10 +364,10 @@ Em computação paralela, o \textit{\textbf{speedup}} é utilizado para conhecer o 
 Speedup = \frac{{Tempo\,Serial}}{{Tempo\,Paralelo}}
 \end{equation}
 
-Outra métrica de desempenho para se medir o ganho em ambientes paralelos é a \textbf{eficiência} que é determinada pela fração entre o \textit{Speedup} de \textit{p} processadores sobre \textit{p}, conforme pode ser visto na equação .
+Outra métrica de desempenho para se medir o ganho em ambientes paralelos é a \textbf{eficiência} que é determinada pela fração entre o \textit{Speedup} de \textit{p} processadores sobre \textit{p}, conforme pode ser visto na equação \ref{eq_eficiencia}.
 
-\begin{equation} \label{eq_speedup}
-efici\^e nci{a_{(p)}} = \frac{{Speedu{p_{(p)}}}}{p}
+\begin{equation} \label{eq_eficiencia}
+efficienc{y_{(p)}} = \frac{{Speedu{p_{(p)}}}}{p}
 \end{equation}
 
 O \textbf{custo} reflete a soma do tempo que cada processador  gasta resolvendo um problema, essa métrica é o produto do tempo de execução  e o número de processadores utilizados. Para um único processador, o custo é o tempo de execução do algoritmo sequencial mais rápido conhecido.
