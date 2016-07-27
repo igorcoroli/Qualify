@@ -1,8 +1,18 @@
 \chapter{Introdução}\label{cap-introducao}
 
-O problema de reconhecimento de padrões tem sido 
+A face humana possui características de informações as quais podemos facilmente identificar, podemos citar inúmeras delas como, nariz, olhos, canto dos olhos, boca, canto da boca, sobrancelhas, entre outros. Esses pontos de controle, denotam características salientes quando analisados em uma imagem as quais denominaremos de pontos fiduciais (do inglês, \textit{Fiducial Points}). Os pontos fiduciais são informações úteis para diversos tipos de  sistemas de reconhecimento facial.
 
-Detecção de pontos fiduciais é um dos clássicos problemas do processamento digital e pode ser aplicado a diversos sistemas. O \textit{core} desse trabalho é a paralelização do Detector por Produto interno (so inglês, \textit{Inner Product Detector} - IPD) proposto por \cite{waldir}. O IPD consiste em uma cascata de detectores baseados em filtro de correlação que executam operações de produto interno. Desse modo, é mister desse trabalho investigar os pontos de paralelização desse algoritmo e aplicar técnicas de computação paralela de modo a medir o seu desempenho final.
+Os métodos desenvolvidos para o reconhecimento facial são estudados no campo de Reconhecimento de Padrões. è comum categorizarmos a detecção de pontos fiduciais em locais e globais. Os métodos locais tem por características a utilização somente da zona da imagem na qual o ponto pertença, não necessitando de pontos adicionais. Os métodos globais, por sua vez, utilizam informações do resto do face, além do ponto analisado. Estes por sua vez, tendem a ser menos suscetíveis à
+variação de pose e iluminação do que os métodos locais.
+
+Um dos métodos clássicos utilizados no reconhecimento de padrões é a filtragem de correlação, esse método consiste na filtragem casada no domínio da frequência. Esse filtro pode ser obtido através da correlação cruzada entre o conjugado invertido do padrão que se deseja detectar e um sinal desconhecido no domínio da frequência. A correlação pode ser considerada uma medida de similaridade entre dois sinais.
+
+O método proposto por \cite{waldir} sugere o uso de uma classe de detectores baseados em filtros de corelação denominados de Detectores por Produto Interno (IPD) para o reconhecimento de pontos fiduciais. O sistema compõe-se de uma associação de classificadores em série, os quais denominaremos de cascata de classificadores, sendo que a entrada de um classificador é a saída do imediatamente anterior. A principal diferença entre o sistema e outros métodos é a operação de produto interno na fase de classificação.
+
+Uma contribuiçao desse trabalho é aplicar o detector IPD a um sistema embarcado (\textit{smartphone}), no qual recursos computacionais como memórias e poder de processamento, geralmente, são reduzidos quando comparados com \textit{desktops}. Devido a grande quantidade de operações do sistema no reconhecimento dos pontos fiduciais de interesse é proposto como outra contribuição deste trabalho a utilização de recursos de computação paralela em algumas etapas na tentativa de reduzir o custo computacional de processamento. 
+
+Ao final, far-se-á uma avaliação de desempenho comparando os métodos com a utilização de computação paralela e sem o uso da mesma, através de aplicativos apropriados. Além disso, pretende-se analisar a distribuição da carga de processamento nos diversos \textit{cores} do processador. Para a implementação do sistema será utilizada a plataorma Android e a biblioteca OpenCV.
+
 
 \section{Objetivos da Dissertação}
 O objetivo principal desta dissertação é investigar o desempenho de um sistema de detecção de pontos fiduciais de faces humanas, que utiliza Detectores por Produto Interno em plataforma móvel \textit{multi-core} quando submetidos à técnicas de computação paralela.
