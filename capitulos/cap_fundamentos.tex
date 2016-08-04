@@ -238,7 +238,7 @@ Estudos a respeito do uso de núcleos de processamento (\textit{cores}) em telefo
 \end{table}
 \end{center}
 
-\section{Sistema IPD-PCA}
+\section{Sistema IPD-PCA}\label{sistema-IPD-PCA}
 
 Para a implementação do sistema proposto levamos em consideração que o problema de aprendizagem é supervisionado, logo, temos que os padrões utilizados para o treinamento possuem uma classe pré-especificada. O sistema será dividido em duas etapas: treino e teste.
 
@@ -290,9 +290,9 @@ por se tratar de blocos com centros em pontos fiduciais e as classes $\mathcal{A
 
 \subsubsection{Procedimentos para Treinamento}\label{Procedimentos-Treino}
 
-A seguir será explicado o funcionamento do restante dos blocos da Figura \ref{fig_Train_Schema}. Passado o bloco de procedimentos iniciais, serão projetados \textit{k} detectores $\rm \textbf{h}_{\phi _i}$ (\textit{i}={1,...,\textit{k}}), um para cada uma das componentes principais com maiores variâncias utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{k} vetores é iniciado o treinamento do classificador AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}, que será responsável pela detecção das classes. Cada bloco pertencente as classes de positivos e negativos (saída do bloco de procedimentos iniciais para Treinamento) será subtraído de um bloco médio de todas as classes de positivos (denominado $\mu_{U}$), em seguida, serão processados utilizando-se o produto interno $\rm h_{\phi i}^{*T}$${B_Z}$. Desse modo, cada bloco ${B_Z}$ terá um vetor associado denominado $\rm d$$_{B_Z}$ com dimensões 1x\textit{k}. O conjunto de vetores $\rm d$$_{B_Z}$ serão utilizados no treinamento do classificador  de modo que possamos discriminar blocos positivos e negativos na outra etapa (teste).
+A seguir será explicado o funcionamento do restante dos blocos da Figura \ref{fig_Train_Schema}. Passado o bloco de procedimentos iniciais, serão projetados \textit{k} detectores $\rm \textbf{h}_{\phi _i}$ (\textit{i}={1,...,\textit{k}}), um para cada uma das componentes principais com maiores variâncias utilizando-se a Equação \ref{eq_IPD-B-PCA_Final}. Depois de encontrados os \textit{k} vetores é iniciado o treinamento do classificador AdaBoost\footnote{\textit{Adaptative Boosting}, é a técnica de aprendizado na qual podemos construir classificadores fortes a partir de uma combinação de classicadores fracos.}, que será responsável pela detecção das classes. Cada bloco pertencente as classes de positivos e negativos (saída do bloco de procedimentos iniciais para Treinamento) será subtraído de um bloco médio de todas as classes de positivos (denominado $\mu_{U}$), em seguida, serão processados utilizando-se o produto interno $\rm h_{\phi i}^{T}$${B_Z}$. Desse modo, cada bloco ${B_Z}$ terá um vetor associado denominado $\rm d$$_{B_Z}$ com dimensões 1x\textit{k}. O conjunto de vetores $\rm d$$_{B_Z}$ serão utilizados no treinamento do classificador  de modo que possamos discriminar blocos positivos e negativos na outra etapa (teste).
 
-\subsection{Teste}
+\subsection{Teste}\label{teste}
 
 A Figura \ref{fig_Schema_Test} ilustra o diagrama em blocos que representa a fase de teste para o sistema IPD-PCA, que será detalhado a seguir.
 
@@ -332,6 +332,52 @@ A ideia central desse trabalho é de identificar as estruturas paralelizáveis no 
 
 
 \section{Modelo Proposto} \label{sec_ModeloProposto}
+
+O modelo proposto tem como objetivo detectar no sistema os pontos que podem ser paralelizados e utilizar técnicas de programação paralela para solucioná-los. Assim como foi abordado na seção \ref{sistema-IPD-PCA} o sistema será dividido em duas etapas: treino e teste. A partir do conhecimento adquirido nas seções \ref{treino} e \ref{teste}, respectivamente treino e teste iremos propor uma nova abordagem.
+
+\subsection*{Treino}
+
+A etapa de Treino é realizada de forma \textit{off-line}, ou seja, esta etapa é realizada previamente com o intuito de ensinar o sistema a detectar o ponto fiducial desejado. Tomaremos como base da explicação a Figura \ref{fig_Train_Schema} apresentada na seção \ref{treino}.
+
+A etapa de treinamento no sistema IPD se dá de forma sequencial, ou seja, as imagens são carregadas e processadas uma a uma no sistema apresentado na Figura \ref{fig_Train_Schema}. A primeira modificação proposta está nessa abordagem. No primeiro bloco, denominado de \textit{Procedimentos Iniciais de Treinamento} - PIT, temos como saída os blocos referentes as classes positivos e negativos, sendo que para cada imagem teremos 1 bloco positivo (que tem como centro um ponto fiducial) e 50 blocos negativos (demais blocos), conforme pode ser visto na Figura \ref{fig_Pre-Proc}. A alteração consiste em fazer um \textit{buffer} com todos os blocos de todas as imagens utilizadas na etapa de Treinamento, de modo que o carregamento das imagens continuaria inalterado (sequencial), porém, ao passar pela fase PIT todos os blocos seriam armazenados conforme pode ser verificado na Figura \ref{fig_Proposal1}. Fica claro perceber que para \textit{k} imagens de treinamento teremos \textit{k} blocos positivos e \textit{k}x50 blocos negativos.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{figuras/Proposal_1.png}
+\caption{Modificação após o Procedimentos Iniciais de Treinamento.}
+\label{fig_Proposal1}
+\end{figure}
+
+Na fase \textit{Projeto de \textit{$h_{\phi _i}$}} do esquema mostrado na Figura \ref{fig_Train_Schema} serão projetados  \textit{i} detectores \textit{$\rm h_{\phi _i}$}, uma para cada componente principal. Para o treinamento do sistema desenvolvido em \cite{waldir}, por exemplo, o número de componentes principais na maioria dos pontos fiduciais foi de \textit{N} = 63. Para cada um desses detectores teremos uma operação de produto interno com cada um dos blocos positivos e negativos conforme é dado na etapa \textit{Produto Interno $h_{\phi i}^{T}$${B_Z}$} da Figura \ref{fig_Train_Schema}. Como essas operações não dependem de uma das outras ou de outros resultados, propomos a paralelização dessas operações. O esquema proposto pode ser observado na Figura \ref{fig_Proposal2}.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.95]{figuras/Proposal2.png}
+\caption{Paralelização ds operações de Produto Interno.}
+\label{fig_Proposal2}
+\end{figure}
+
+O produto interno entre um detector \textit{$\rm h_{\phi _i}$} e um bloco bloco ${B_Z}$ irá gerar um vetor denominado de $\rm d$$_{B_Z}$ com dimensões 1x\textit{N} (sendo \textit{N} o número de detectores) conforme mostrado na seção \ref{Procedimentos-Treino}. Enfatiza-se aqui, que para cada \textit{i} detector será feito operações de produto interno com cada um dos blocos ${B_Z}$ (sendo \textit{i} a posição de cada um dos \textit{N} detectores), logo, teremos 51 operações para cada detector. Se considerarmos \textit{k} imagens de treinamento e \textit{N} detectores teremos \textit{k} x \textit{N} x 51 operações para cada ponto fiducial. O esquema proposto pode ser visto na Figura \ref{fig_Proposal3}.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.95]{figuras/Proposal3.png}
+\caption{Paralelização ds operações de Produto Interno para cada detector \textit{$\rm h_{\phi _i}$}.}
+\label{fig_Proposal3}
+\end{figure}
+
+%$\rm h_{\phi i}^{T}$${B_Z}$
+
+
+\subsection*{Teste}
+
+
+
+
+
+
+
+
 
 As Figuras \ref{fig:ParalelismoTreino} e \ref{fig:ParalelismoTeste} ilustram as modificações na etapa de treino e de teste, respectivamente, propostas nesse trabalho. Conforme podemos perceber a fase de Procedimentos Iniciais para Treinamento é a mesma para ambas as etapas (Treino e Teste), ela constitui-se dos procedimentos mostrados na seção \ref{Pre-Proc} de forma sequencial, desse modo não há meios de paralelizá-lo.
 
